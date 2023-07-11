@@ -21,7 +21,7 @@ const App = () => {
     return (
       <div>
         <Nav />
-        <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-5">
+        <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 bg-gray-200">
           <Leftbar />
           <Outlet />
           <Rightbar />

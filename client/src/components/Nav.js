@@ -5,10 +5,12 @@ const Nav = () => {
     <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[70px] w-full">
       <div className="flex items-center justify-between col-span-1">
         <div className="ml-5 cursor-pointer">
-          <span className="text-base sm:text-4xl font-bold">薪水現形咒</span>
+          <span className="text-base md:text-2xl lg:text-4xl font-bold">
+            薪水現形咒
+          </span>
         </div>
 
-        <div class="px-4 cursor-pointer sm:hidden" id="burger">
+        <div class="px-4 cursor-pointer lg:hidden" id="burger">
           <svg
             class="w-6 h-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +47,7 @@ const Nav = () => {
 
           <input
             placeholder="搜尋..."
-            className="searchInput border-none outline-none w-3/4  bg-slate-200 text-base "
+            className="searchInput border-none outline-none w-5/6  bg-slate-200 text-base "
           />
 
           <svg
