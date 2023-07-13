@@ -23,7 +23,7 @@ const Posts = () => {
   ];
 
   return (
-    <div className="flex flex-col md:mx-[120px] gap-[20px] mt-2">
+    <div className="flex flex-col md:mx-[10px] gap-[20px] mt-2">
       {posts.map((post) => (
         <Post post={post} key={post.id} />
       ))}
