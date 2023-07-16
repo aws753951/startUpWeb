@@ -1,26 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Message from "./Message";
 import TextareaAutosize from "react-textarea-autosize";
-// import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-// const API_URL = "http://localhost:8080/api/messages/";
-
-const Chat = () => {
+const Chat = ({ user }) => {
   const [open, setOpen] = useState(true);
-  //   const [mes, setMes] = useState([]);
-
-  //   useEffect(() => {
-  //     const getConversations = async () => {
-  //       try {
-  //         const res = await axios.get(API_URL + "64afa7a8e1012ded41350fff");
-  //         setMes(res.data);
-  //         console.log(res.data);
-  //       } catch (err) {
-  //         console.log(err);
-  //       }
-  //     };
-  //     getConversations();
-  //   }, []);
 
   const mes = [
     {
@@ -44,6 +28,15 @@ const Chat = () => {
       createdAt: "2023-07-13T07:45:58.379+00:00",
     },
   ];
+
+  const navigate = useNavigate();
+  const handleMessage = () => {
+    if (!user) {
+      console.log(user);
+      navigate("/login");
+    }
+    console.log(user);
+  };
 
   return (
     <div className="shadow-lg bg-white rounded-[10px] py-1 ">
@@ -95,7 +88,7 @@ const Chat = () => {
             <Message mes={c} key={i} own={false} />
           ))}
         </div>
-        <div className="p-5 flex items-end gap-2">
+        <div className="p-5 flex items-end gap-2 ">
           <TextareaAutosize
             placeholder="在想甚麼?"
             className="w-full outline-none bg-slate-200 overflow-hidden resize-none py-[10px] px-[20px] rounded-[20px]"
@@ -106,7 +99,8 @@ const Chat = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 mb-[10px]"
+            className="w-6 h-6 mb-[10px] cursor-pointer "
+            onClick={handleMessage}
           >
             <path
               strokeLinecap="round"
