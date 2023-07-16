@@ -3,7 +3,7 @@ import Message from "./Message";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
 
-const Chat = ({ user }) => {
+const Chat = () => {
   const [open, setOpen] = useState(true);
 
   const mes = [
@@ -31,11 +31,10 @@ const Chat = ({ user }) => {
 
   const navigate = useNavigate();
   const handleMessage = () => {
-    if (!user) {
-      console.log(user);
+    const jwt_token = localStorage.getItem("jwt_token");
+    if (!jwt_token) {
       navigate("/login");
     }
-    console.log(user);
   };
 
   return (

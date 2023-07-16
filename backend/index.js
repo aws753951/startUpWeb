@@ -8,18 +8,6 @@ require("./config/passport");
 const authRoute = require("./routes/auth");
 
 app.use(
-  cookieSession({
-    name: "session",
-    // secret
-    keys: [process.env.COOKIESESSIONSECRET],
-    // one day
-    maxAge: 24 * 60 * 60 * 1000,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(
   cors({
     origin: "http://localhost:3000",
     methods: "GET,POST,PUT,DELETE",

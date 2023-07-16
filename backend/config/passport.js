@@ -16,13 +16,3 @@ passport.use(
     }
   )
 );
-
-// 當使用session時得用這些，使req賦予user這個屬性，裡面的東西為done回傳出來的profile
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-// 當使用session時得用這些
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
