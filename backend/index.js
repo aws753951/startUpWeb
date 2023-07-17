@@ -7,6 +7,16 @@ require("./config/passport");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+
+mongoose
+  .connect(process.env.ATLAS)
+  .then(() => {
+    console.log("connect to ATLAS");
+  })
+  .catch((e) => {
+    console.log(e);
+  });
 
 app.use(express.json()); //解析JSON格式的請求，並把其附加到req.body
 app.use(express.urlencoded({ extended: true })); //解析post當中的參數(x-www-form-urlencoded)，附加到req.body

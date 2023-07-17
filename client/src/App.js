@@ -2,10 +2,12 @@ import React from "react";
 import "./output.css";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Nav from "./components/Nav";
 import Leftbar from "./components/Leftbar";
 import Rightbar from "./components/Rightbar";
 import Home from "./components/Home";
+import Temp from "./pages/Temp";
 
 const App = () => {
   const Layout = () => {
@@ -28,6 +30,8 @@ const App = () => {
           <Route index element={<Home />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/auth" element={<Temp />} />
       </Routes>
     </BrowserRouter>
   );
