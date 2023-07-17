@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Message from "./Message";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Chat = () => {
   const [open, setOpen] = useState(true);
@@ -30,9 +31,21 @@ const Chat = () => {
   ];
 
   const navigate = useNavigate();
-  const handleMessage = () => {
-    const jwt_token = localStorage.getItem("jwt_token");
+  const handleMessage = async () => {
+    let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
+      navigate("/login");
+    }
+
+    try {
+      let ans = await axios.get("http://localhost:8080/post", {
+        headers: {
+          Authorization: jwt_token,
+        },
+      });
+      console.log(ans);
+    } catch (e) {
+      window.alert("session過期，幫你重新導向登入頁面");
       navigate("/login");
     }
   };

@@ -10,9 +10,9 @@ const Nav = () => {
           </span>
         </div>
 
-        <div class="px-4 cursor-pointer xl:hidden" id="burger">
+        <div className="px-4 cursor-pointer xl:hidden" id="burger">
           <svg
-            class="w-6 h-6"
+            className="w-6 h-6"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

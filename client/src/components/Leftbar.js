@@ -62,8 +62,6 @@ const Leftbar = () => {
       <h1>Leftbar</h1>
       <h1>Leftbar</h1>
       <h1>Leftbar</h1>
-      <h1>Leftbar</h1>
-      <h1>Leftbar</h1>
     </div>
   );
 };
