@@ -965,6 +965,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
 }
@@ -1034,10 +1039,6 @@ video {
   line-height: 2.25rem;
 }
 
-.text-\[100px\] {
-  font-size: 100px;
-}
-
 .text-\[12px\] {
   font-size: 12px;
 }
@@ -1058,10 +1059,6 @@ video {
   font-size: 30px;
 }
 
-.text-\[50px\] {
-  font-size: 50px;
-}
-
 .text-\[60px\] {
   font-size: 60px;
 }
@@ -1073,10 +1070,6 @@ video {
 
 .font-bold {
   font-weight: 700;
-}
-
-.leading-\[100px\] {
-  line-height: 100px;
 }
 
 .text-black {
@@ -1214,6 +1207,10 @@ video {
 
   .xl\:w-1\/2 {
     width: 50%;
+  }
+
+  .xl\:w-5\/6 {
+    width: 83.333333%;
   }
 
   .xl\:grid-cols-2 {
