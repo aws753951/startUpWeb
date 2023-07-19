@@ -5,25 +5,25 @@ import { useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 
 const Register = () => {
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
   // 待改
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const googleAuth = () => {
     window.open(
-      `https://startupwebsite.onrender.com/auth/google/callback`,
+      `${process.env.REACT_APP_DB_URL}/auth/google/callback`,
       "_self"
     );
   };
   const normalRegister = async () => {
     try {
-      await axios.post("https://startupwebsite.onrender.com/auth/register", {
+      await axios.post(`${process.env.REACT_APP_DB_URL}/auth/register`, {
         email,
         password,
       });
       window.alert("請於10分鐘內至信箱認證");
-      nagivate("/login");
+      navigate("/login");
     } catch (e) {
       // 若失敗則會維持在login的畫面
       window.alert("信箱已被註冊，請用google或者換個email");

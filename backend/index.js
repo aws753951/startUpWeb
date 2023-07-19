@@ -32,4 +32,8 @@ app.use(
   postRoute
 );
 
+app.get("/", (req, res) => {
+  res.status(200).send("api test");
+});
+
 app.listen("8080", () => console.log(`8080 running`));

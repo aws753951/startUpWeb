@@ -8,6 +8,7 @@ import Leftbar from "./components/Leftbar";
 import Rightbar from "./components/Rightbar";
 import Home from "./components/Home";
 import Temp from "./pages/Temp";
+import Blank from "./pages/Blank";
 
 const App = () => {
   const Layout = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/auth/confirm/*" element={<Temp />} />
+        <Route path="/auth/setjwt/*" element={<Blank />} />
       </Routes>
     </BrowserRouter>
   );

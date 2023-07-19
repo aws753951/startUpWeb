@@ -25,7 +25,7 @@ router.get(
       const token = jwt.sign({ email }, process.env.PASSPORT_SECRET, {
         expiresIn: 60 * 60 * 24,
       });
-      res.redirect(`${process.env.CLIENT_URL}?token=JWT ${token}`);
+      res.redirect(`${process.env.CLIENT_URL}auth/setjwt/?token=JWT ${token}`);
     } catch (e) {
       console.log(e);
       res.redirect(`${process.env.CLIENT_URL}?trouble=true`);

@@ -4,14 +4,14 @@ import { useNavigate, Link } from "react-router-dom";
 import GoogleButton from "react-google-button";
 
 const Login = () => {
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
   // 待改
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const googleAuth = () => {
     window.open(
-      `https://startupwebsite.onrender.com/auth/google/callback`,
+      `${process.env.REACT_APP_DB_URL}/auth/google/callback`,
       "_self"
     );
   };
@@ -19,14 +19,14 @@ const Login = () => {
   const normalLogin = async () => {
     try {
       let response = await axios.post(
-        "https://startupwebsite.onrender.com/auth/login",
+        `${process.env.REACT_APP_DB_URL}/auth/login`,
         {
           email,
           password,
         }
       );
       localStorage.setItem("jwt_token", JSON.stringify(response.data));
-      nagivate("/");
+      navigate("/");
     } catch (e) {
       // 若失敗則會維持在login的畫面
       window.alert("帳號或密碼錯誤");

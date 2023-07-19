@@ -34,19 +34,20 @@ const Chat = () => {
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
+      window.alert("要留言請先登入");
       navigate("/login");
-    }
-
-    try {
-      let ans = await axios.get("https://startupwebsite.onrender.com/post", {
-        headers: {
-          Authorization: jwt_token,
-        },
-      });
-      console.log(ans);
-    } catch (e) {
-      window.alert("session過期，幫你重新導向登入頁面");
-      navigate("/login");
+    } else {
+      try {
+        let ans = await axios.get(`${process.env.REACT_APP_DB_URL}/post`, {
+          headers: {
+            Authorization: jwt_token,
+          },
+        });
+        console.log(ans);
+      } catch (e) {
+        window.alert("session過期，幫你重新導向登入頁面");
+        navigate("/login");
+      }
     }
   };
 

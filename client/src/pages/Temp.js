@@ -13,10 +13,9 @@ const Temp = () => {
   useEffect(() => {
     const register = async () => {
       try {
-        let response = await axios.get(
-          `https://startupwebsite.onrender.com/auth/confirm/${token}`
+        await axios.get(
+          `${process.env.REACT_APP_DB_URL}/auth/confirm/${token}`
         );
-        console.log(response.data);
         setApprove(true);
         setRes(true);
         setTimeout(() => {
