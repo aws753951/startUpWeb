@@ -723,6 +723,10 @@ video {
   height: 2rem;
 }
 
+.h-\[200px\] {
+  height: 200px;
+}
+
 .h-\[400px\] {
   height: 400px;
 }
@@ -965,11 +969,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-black {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
 }
@@ -1061,6 +1060,10 @@ video {
 
 .text-\[60px\] {
   font-size: 60px;
+}
+
+.text-\[70px\] {
+  font-size: 70px;
 }
 
 .text-base {
@@ -1203,14 +1206,6 @@ video {
 
   .xl\:hidden {
     display: none;
-  }
-
-  .xl\:w-1\/2 {
-    width: 50%;
-  }
-
-  .xl\:w-5\/6 {
-    width: 83.333333%;
   }
 
   .xl\:grid-cols-2 {

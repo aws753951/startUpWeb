@@ -60,8 +60,9 @@ router.post("/register", async (req, res) => {
     const options = {
       from: "startupwebsite@gmail.com",
       to: email,
-      subject: "這是 node.js 發送的測試信件",
-      html: `<h2>打工人，打工魂，打工都是人上人，我們要悄悄地打工，然後驚艷所有人</h2> <p>打工人的傲氣從這一步開啟，請於註冊10分鐘內點擊註冊認證的<a href="http://localhost:8080/auth/confirm/${token}" title="http://localhost:8080/auth/confirm/${token}">網址</a> 薪資透明是打工人的驕傲，在未推倒資本主義的高牆前，我會義無反顧維護打工人最後的尊嚴</p>`,
+      subject: "薪水網會員註冊認證",
+      html: `<h2>打工人，打工魂，打工都是人上人，我們要悄悄地打工，然後驚艷所有人</h2>\
+       <p>打工人的傲氣從這一步開啟，請於註冊10分鐘內點擊註冊認證的<a href="${process.env.CLIENT_URL}auth/confirm/?token=${token}" title="${process.env.CLIENT_URL}auth/confirm/?token=${token}">網址</a> 薪資透明是打工人的驕傲，在未推倒資本主義的高牆前，我會義無反顧維護打工人最後的尊嚴</p>`,
     };
     transporter.sendMail(options, function (error, info) {
       if (error) {
@@ -70,7 +71,7 @@ router.post("/register", async (req, res) => {
         console.log("訊息發送: " + info.response);
       }
     });
-    res.send("123");
+    res.status(200).send("email sent");
   } catch (e) {
     console.log(e);
     return res.status(500).send("trouble with building token or sending email");
@@ -78,26 +79,26 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/confirm/:token", async (req, res) => {
-  let email;
-  let password;
-  try {
-    const { token } = req.params;
-    const decode = jwt.verify(token, process.env.PASSPORT_SECRET);
-    email = decode.email;
-    password = decode.password;
-  } catch (e) {
-    console.log(e);
-    return res.send("touble with decoding token, mostly with token expiration");
-  }
+  const { token } = req.params;
 
   try {
-    let newUser = new User({ email, password });
-    await newUser.save();
-    // 待改
-    return res.send("nice");
+    const decode = jwt.verify(token, process.env.PASSPORT_SECRET);
+    const email = decode.email;
+    const password = decode.password;
+
+    let foundUser = await User.findOne({ email });
+    if (foundUser) {
+      console.log("user exist");
+      return res.status(403).send("User has already been registered");
+    } else {
+      console.log("Creating a new user...");
+      let newUser = new User({ email, password });
+      await newUser.save();
+      return res.status(200).send("User has been saved");
+    }
   } catch (e) {
     console.log(e);
-    return res.send("trouble with saving user into DB");
+    return res.status(403).send("Trouble with token or saving user into DB");
   }
 });
 

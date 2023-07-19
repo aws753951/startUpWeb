@@ -23,13 +23,13 @@ const Login = () => {
       nagivate("/");
     } catch (e) {
       // 若失敗則會維持在login的畫面
-      console.log(e);
+      window.alert("帳號或密碼錯誤");
     }
   };
 
   return (
     <div className=" login min-h-screen bg-purple-300 flex justify-center items-center ">
-      <div className="my-5 xl:mt-0 card flex flex-col  xl:grid xl:grid-cols-2 bg-white w-5/6 xl:w-1/2 min-h-[600px]  rounded-lg overflow-hidden">
+      <div className="my-5 xl:mt-0 card flex flex-col  xl:grid xl:grid-cols-2 bg-white w-5/6 min-h-[600px]  rounded-lg overflow-hidden">
         <div className="left col-span-1  bg-blue-500  bg-opacity-80 p-[50px] flex flex-col justify-center gap-[30px] text-white">
           <h1 className="text-[30px] text-center">貼文，留言，聊天</h1>
           <h1 className="text-[60px] font-bold text-center">請先登入</h1>

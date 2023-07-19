@@ -31,7 +31,7 @@ const App = () => {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/auth" element={<Temp />} />
+        <Route path="/auth/confirm/*" element={<Temp />} />
       </Routes>
     </BrowserRouter>
   );
