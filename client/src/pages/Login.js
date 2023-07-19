@@ -10,15 +10,21 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const googleAuth = () => {
-    window.open(`http://localhost:8080/auth/google/callback`, "_self");
+    window.open(
+      `https://startupwebsite.onrender.com/auth/google/callback`,
+      "_self"
+    );
   };
 
   const normalLogin = async () => {
     try {
-      let response = await axios.post("http://localhost:8080/auth/login", {
-        email,
-        password,
-      });
+      let response = await axios.post(
+        "https://startupwebsite.onrender.com/auth/login",
+        {
+          email,
+          password,
+        }
+      );
       localStorage.setItem("jwt_token", JSON.stringify(response.data));
       nagivate("/");
     } catch (e) {

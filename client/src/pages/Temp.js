@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Temp = () => {
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
@@ -14,25 +14,25 @@ const Temp = () => {
     const register = async () => {
       try {
         let response = await axios.get(
-          `http://localhost:8080/auth/confirm/${token}`
+          `https://startupwebsite.onrender.com/auth/confirm/${token}`
         );
         console.log(response.data);
         setApprove(true);
         setRes(true);
         setTimeout(() => {
-          nagivate("/login");
+          navigate("/login");
         }, 3000);
       } catch (e) {
         // 若失敗則會維持在login的畫面
         setRes(true);
         console.log(e);
         setTimeout(() => {
-          nagivate("/register");
+          navigate("/register");
         }, 3000);
       }
     };
     register();
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <div>

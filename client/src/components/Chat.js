@@ -38,7 +38,7 @@ const Chat = () => {
     }
 
     try {
-      let ans = await axios.get("http://localhost:8080/post", {
+      let ans = await axios.get("https://startupwebsite.onrender.com/post", {
         headers: {
           Authorization: jwt_token,
         },

@@ -11,11 +11,14 @@ const Register = () => {
   const [password, setPassword] = useState("");
 
   const googleAuth = () => {
-    window.open(`http://localhost:8080/auth/google/callback`, "_self");
+    window.open(
+      `https://startupwebsite.onrender.com/auth/google/callback`,
+      "_self"
+    );
   };
   const normalRegister = async () => {
     try {
-      await axios.post("http://localhost:8080/auth/register", {
+      await axios.post("https://startupwebsite.onrender.com/auth/register", {
         email,
         password,
       });
