@@ -10,7 +10,7 @@ const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
 
   return (
-    <div className="post shadow-lg rounded-[10px]  bg-white overflow-hidden">
+    <div className={`shadow-lg rounded-[10px] bg-white overflow-hidden`}>
       <div className="container  p-[20px]">
         <div className="user flex justify-between items-center">
           <div className="userInfo flex items-center  gap-[20px]">
@@ -64,7 +64,9 @@ const Post = ({ post }) => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className={`w-6 h-6 ${disliked ? "text-red-500" : "text-black"}`}
+                className={`w-6 h-6 ${
+                  disliked ? "text-red-500" : "text-black"
+                }`}
               >
                 <path
                   strokeLinecap="round"

@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const View = () => {
+const View = ({ meet, setMeet }) => {
   const data = [
     { x: 100, y: 2 },
     { x: 120, y: 1 },
@@ -108,10 +108,42 @@ const View = () => {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="bg-white rounded-[10px] p-5 mt-2 ">
-        <div className="text-center font-bold text-[30px]">某某公司</div>
-        <div className="text-center">薪資中位數: 123</div>
-        <div className="text-center">平均滿意度: 4.6</div>
+      <div className="bg-white gap-[20px] flex justify-between rounded-[10px] p-5 mt-2 ">
+        {!meet && (
+          <div
+            onClick={() => {
+              setMeet(!meet);
+            }}
+            className="bg-purple-300 flex-1 flex justify-center items-center rounded-[20px] cursor-pointer"
+          >
+            <div className="text-[24px] font-bold text-center">轉面試頁面</div>
+          </div>
+        )}
+        {meet && (
+          <div
+            onClick={() => {
+              setMeet(!meet);
+            }}
+            className="bg-blue-300 flex-1 flex justify-center items-center rounded-[20px] cursor-pointer"
+          >
+            <div className="text-[24px] font-bold text-center">轉工作頁面</div>
+          </div>
+        )}
+        <div className="flex-2 w-[40%] xl:w-[60%] ">
+          <div className="text-center font-bold text-[30px]">某某公司</div>
+          <div className="text-center">薪資中位數: 12萬</div>
+          <div className="text-center">平均滿意度: 4.6</div>
+        </div>
+        {!meet && (
+          <div className="bg-blue-300  flex-1 flex justify-center items-center rounded-[20px]">
+            <div className="text-[24px] font-bold text-center">寫工作評論</div>
+          </div>
+        )}
+        {meet && (
+          <div className="bg-purple-300  flex-1 flex justify-center items-center rounded-[20px]">
+            <div className="text-[24px] font-bold text-center">寫面試評論</div>
+          </div>
+        )}
       </div>
     </div>
   );

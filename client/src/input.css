@@ -18,5 +18,5 @@
 }
 
 .scrollset {
-  @apply sticky top-[70px] h-[calc(100vh-70px)] overflow-scroll no-scrollbar;
+  @apply sticky top-[90px] h-[calc(100vh-90px)] overflow-scroll no-scrollbar;
 }

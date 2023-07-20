@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./output.css";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Login from "./pages/Login";
@@ -11,11 +11,15 @@ import Temp from "./pages/Temp";
 import Blank from "./pages/Blank";
 
 const App = () => {
-  const Layout = () => {
+  const Layout = ({ meet }) => {
     return (
       <div>
         <Nav />
-        <div className="grid grid-cols-5 bg-gray-200">
+        <div
+          className={`grid grid-cols-5 ${
+            meet ? "bg-purple-100" : "bg-blue-100"
+          }`}
+        >
           <Leftbar />
           <Outlet />
           <Rightbar />
@@ -23,12 +27,12 @@ const App = () => {
       </div>
     );
   };
-
+  const [meet, setMeet] = useState(true);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route path="/" element={<Layout meet={meet} />}>
+          <Route index element={<Home meet={meet} setMeet={setMeet} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

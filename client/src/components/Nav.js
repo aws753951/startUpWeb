@@ -2,7 +2,7 @@ import React from "react";
 
 const Nav = () => {
   return (
-    <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[70px] w-full">
+    <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[90px] w-full">
       <div className="flex items-center justify-between col-span-1">
         <div className="ml-5 cursor-pointer">
           <span className="text-base md:text-2xl lg:text-4xl font-bold">
@@ -29,14 +29,14 @@ const Nav = () => {
       </div>
 
       <div className="col-span-1 ">
-        <div className="searchBar flex items-center w-full h-10 rounded-full bg-slate-200 overflow-hidden">
+        <div className="searchBar flex items-center w-full h-[66px] rounded-full bg-slate-200 overflow-hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 mx-5 text-3xl"
+            className="w-[48px] h-[48px] mx-5 text-3xl"
           >
             <path
               strokeLinecap="round"
@@ -47,7 +47,7 @@ const Nav = () => {
 
           <input
             placeholder="搜尋..."
-            className="searchInput border-none outline-none w-5/6  bg-slate-200 text-base "
+            className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[36px] "
           />
 
           <svg
@@ -56,7 +56,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 mx-5 text-3xl"
+            className="w-[48px] h-[48px] mx-5 text-3xl"
           >
             <path
               strokeLinecap="round"
