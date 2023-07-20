@@ -17,6 +17,16 @@
   }
 }
 
+@layer base {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
+  }
+}
+
 .scrollset {
   @apply sticky top-[90px] h-[calc(100vh-90px)] overflow-scroll no-scrollbar;
 }

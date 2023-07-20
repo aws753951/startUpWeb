@@ -9,6 +9,7 @@ import Rightbar from "./components/Rightbar";
 import Home from "./components/Home";
 import Temp from "./pages/Temp";
 import Blank from "./pages/Blank";
+import Dd from "./pages/Dd";
 
 const App = () => {
   const Layout = ({ meet }) => {
@@ -27,7 +28,7 @@ const App = () => {
       </div>
     );
   };
-  const [meet, setMeet] = useState(true);
+  const [meet, setMeet] = useState(false);
   return (
     <BrowserRouter>
       <Routes>
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/auth/confirm/*" element={<Temp />} />
         <Route path="/auth/setjwt/*" element={<Blank />} />
+        <Route path="/dd" element={<Dd />} />
       </Routes>
     </BrowserRouter>
   );

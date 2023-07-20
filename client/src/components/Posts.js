@@ -1,7 +1,7 @@
 import React from "react";
 import Post from "./Post";
 
-const Posts = () => {
+const Posts = ({ write }) => {
   const posts = [
     {
       id: 1,
@@ -24,9 +24,7 @@ const Posts = () => {
 
   return (
     <div className="flex flex-col md:mx-[10px] gap-[20px] mt-2">
-      {posts.map((post) => (
-        <Post post={post} key={post.id} />
-      ))}
+      {!write && posts.map((post) => <Post post={post} key={post.id} />)}
     </div>
   );
 };
