@@ -4,7 +4,7 @@ import { useState } from "react";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import Comments from "./Comments";
 
-const Post = ({ post }) => {
+const Post = ({ data }) => {
   const liked = false;
   const disliked = true;
   const [commentOpen, setCommentOpen] = useState(false);
@@ -14,26 +14,14 @@ const Post = ({ post }) => {
       <div className="container  p-[20px]">
         <div className="user flex justify-between items-center">
           <div className="userInfo flex items-center  gap-[20px]">
-            <img
-              className="w-[40px] h-[40px] object-cover rounded-full"
-              src={post.profilePic}
-              alt=""
-            />
             <div className="details flex flex-col">
-              <Link to={`/profile/${post.userId}`}>
-                <span className="name font-bold">{post.name}</span>
-              </Link>
+              <span className="name font-bold">{data.username}</span>
               <span className="date text-[12px]">1 min ago</span>
             </div>
           </div>
         </div>
         <div className="content">
-          <p>{post.desc}</p>
-          <img
-            className="w-[100%] h-[500px] object-cover my-2"
-            src={post.img}
-            alt=""
-          />
+          <p>{data.experience}</p>
         </div>
         <div className="info flex items-center gap-[90px]">
           <div className="item flex gap-[20px]">
@@ -55,7 +43,7 @@ const Post = ({ post }) => {
               <span className={`${liked ? "text-green-700" : "text-black"}`}>
                 同意
               </span>
-              <span>12</span>
+              <span>{data.good.length}</span>
             </div>
             <div className="flex gap-[5px]">
               <svg
@@ -77,12 +65,12 @@ const Post = ({ post }) => {
               <span className={`${disliked ? "text-red-500" : "text-black"}`}>
                 不同意
               </span>
-              <span>12</span>
+              <span>{data.bad.length}</span>
             </div>
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+            {data.comments.length} Comments
           </div>
         </div>
       </div>

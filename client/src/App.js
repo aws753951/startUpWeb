@@ -6,10 +6,11 @@ import Register from "./pages/Register";
 import Nav from "./components/Nav";
 import Leftbar from "./components/Leftbar";
 import Rightbar from "./components/Rightbar";
-import Home from "./components/Home";
 import Temp from "./pages/Temp";
 import Blank from "./pages/Blank";
 import Search from "./pages/Search";
+import CompanyInfo from "./components/CompanyInfo";
+import Home from "./components/Home";
 
 const App = () => {
   const Layout = ({ meet }) => {
@@ -32,9 +33,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* 調整背景 */}
         <Route path="/" element={<Layout meet={meet} />}>
-          <Route index element={<Home meet={meet} setMeet={setMeet} />} />
+          <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
+          <Route
+            path="company"
+            element={<CompanyInfo meet={meet} setMeet={setMeet} />}
+          />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

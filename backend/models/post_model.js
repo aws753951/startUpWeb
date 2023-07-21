@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const postSchema = new Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    username: { type: String },
     company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
     jobname: { type: String, required: true },
     level: { type: String, required: true },

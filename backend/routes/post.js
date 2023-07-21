@@ -38,8 +38,8 @@ router.post("/:company_id/article", async (req, res) => {
       res.status(403).send("email not found");
     }
 
-    const { id } = foundUser;
-    let object = { ...req.body, user: id, company: company_id };
+    const { id, username } = foundUser;
+    let object = { ...req.body, user: id, username, company: company_id };
 
     const newPost = new Post(object);
     await newPost.save();

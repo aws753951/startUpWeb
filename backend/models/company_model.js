@@ -12,14 +12,18 @@ const companySchema = new Schema(
     url: {
       type: String,
     },
-    jobposts: {
-      type: [String],
-      default: [],
-    },
-    meetposts: {
-      type: [String],
-      default: [],
-    },
+    jobposts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post", // "Post" 是 postSchema 的集合名稱
+      },
+    ],
+    meetposts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post", // "Post" 是 postSchema 的集合名稱
+      },
+    ],
   },
   { timestamps: true }
 );
