@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
+  const navigate = useNavigate();
+  let [companyName, setCompanyName] = useState("");
+  const handleSearch = () => {
+    if (companyName) {
+      navigate(`/search/?companyName=${companyName}`);
+    }
+  };
+
   return (
     <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[90px] w-full">
       <div className="flex items-center justify-between col-span-1">
@@ -46,11 +55,15 @@ const Nav = () => {
           </svg>
 
           <input
+            onChange={(e) => {
+              setCompanyName(e.target.value);
+            }}
             placeholder="搜尋..."
             className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[36px] "
           />
 
           <svg
+            onClick={handleSearch}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

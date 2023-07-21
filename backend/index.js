@@ -6,6 +6,7 @@ require("dotenv").config();
 require("./config/passport");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
+const searchRoute = require("./routes/search");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
@@ -31,6 +32,8 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   postRoute
 );
+
+app.use("/search", searchRoute);
 
 app.get("/", (req, res) => {
   res.status(200).send("api test");

@@ -9,7 +9,7 @@ import Rightbar from "./components/Rightbar";
 import Home from "./components/Home";
 import Temp from "./pages/Temp";
 import Blank from "./pages/Blank";
-import Dd from "./pages/Dd";
+import Search from "./pages/Search";
 
 const App = () => {
   const Layout = ({ meet }) => {
@@ -34,12 +34,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout meet={meet} />}>
           <Route index element={<Home meet={meet} setMeet={setMeet} />} />
+          <Route path="search" element={<Search />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/auth/confirm/*" element={<Temp />} />
         <Route path="/auth/setjwt/*" element={<Blank />} />
-        <Route path="/dd" element={<Dd />} />
       </Routes>
     </BrowserRouter>
   );

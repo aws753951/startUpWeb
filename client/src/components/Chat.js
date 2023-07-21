@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Chat = () => {
-  const [open, setOpen] = useState(true);
+  let [shrink, setShrink] = useState(false);
 
   const mes = [
     {
@@ -56,7 +56,7 @@ const Chat = () => {
       <div className="flex items-center justify-between">
         <div className="font-bold text-[24px] ml-2">社畜廣場</div>
 
-        {open && (
+        {!shrink && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -65,7 +65,7 @@ const Chat = () => {
             stroke="currentColor"
             className="w-6 h-6 mr-2"
             onClick={() => {
-              setOpen(false);
+              setShrink(!shrink);
             }}
           >
             <path
@@ -75,7 +75,7 @@ const Chat = () => {
             />
           </svg>
         )}
-        {!open && (
+        {shrink && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -84,7 +84,7 @@ const Chat = () => {
             stroke="currentColor"
             className="w-6 h-6  mr-2"
             onClick={() => {
-              setOpen(true);
+              setShrink(!shrink);
             }}
           >
             <path
@@ -95,7 +95,7 @@ const Chat = () => {
           </svg>
         )}
       </div>
-      <div className={` ${open ? "block" : "hidden"}`}>
+      <div className={` ${!shrink ? "block" : "hidden"}`}>
         <div className="p-[10px] bg-blue-200  flex flex-col gap-[10px] h-[400px] overflow-scroll no-scrollbar">
           {mes.map((c, i) => (
             <Message mes={c} key={i} own={false} />

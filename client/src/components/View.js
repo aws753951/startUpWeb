@@ -19,6 +19,7 @@ import MeetPost from "./MeetPost";
 
 const View = ({ meet, setMeet, write, setWrite }) => {
   let [isOpen, setIsOpen] = useState(false);
+  let [shrink, setShrink] = useState(true);
   const data = [
     { x: 100, y: 2 },
     { x: 120, y: 1 },
@@ -65,64 +66,144 @@ const View = ({ meet, setMeet, write, setWrite }) => {
   return (
     <div className="md:mx-[10px]  mt-2 ">
       {!write && (
-        <div className="flex flex-col gap-[10px] ">
-          <div className="bg-white rounded-[10px] p-5 ">
+        <div className="flex flex-col xl:flex-row gap-[10px] ">
+          <div className="bg-white xl:w-[50%]  p-5 relative ">
             <h1 className="text-center font-bold text-[20px] ">薪水分布</h1>
-            <ResponsiveContainer width="100%" height={300}>
-              <ScatterChart
-                margin={{
-                  top: 20,
-                  right: 50,
-                  bottom: 15,
-                  left: 15,
+            {shrink && (
+              <svg
+                onClick={() => {
+                  setShrink(!shrink);
                 }}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6  mr-2 absolute right-2 top-6 cursor-pointer"
               >
-                <XAxis type="number" dataKey="x" name="薪水" unit="萬">
-                  <Label
-                    className="font-bold"
-                    value="年薪"
-                    offset={-13}
-                    position="insideBottom"
-                  />
-                </XAxis>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                />
+              </svg>
+            )}
+            {!shrink && (
+              <svg
+                onClick={() => {
+                  setShrink(!shrink);
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6  mr-2 absolute right-2 top-6 cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                />
+              </svg>
+            )}
+            <div className={`${shrink ? "hidden" : "block"}`}>
+              <ResponsiveContainer width="100%" height={300}>
+                <ScatterChart
+                  margin={{
+                    top: 20,
+                    right: 50,
+                    bottom: 15,
+                    left: 15,
+                  }}
+                >
+                  <XAxis type="number" dataKey="x" name="薪水" unit="萬">
+                    <Label
+                      className="font-bold"
+                      value="年薪"
+                      offset={-13}
+                      position="insideBottom"
+                    />
+                  </XAxis>
 
-                <YAxis type="number" dataKey="y" name="相關年資" unit="年">
-                  <Label
-                    className="font-bold"
-                    value="相關年資"
-                    angle={-90}
-                    offset={-5}
-                    position="insideLeft"
-                  />
-                </YAxis>
-                <Scatter name="薪水分布" data={data} fill="#8884d8" />
-              </ScatterChart>
-            </ResponsiveContainer>
+                  <YAxis type="number" dataKey="y" name="相關年資" unit="年">
+                    <Label
+                      className="font-bold"
+                      value="相關年資"
+                      angle={-90}
+                      offset={-5}
+                      position="insideLeft"
+                    />
+                  </YAxis>
+                  <Scatter name="薪水分布" data={data} fill="#8884d8" />
+                </ScatterChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-          <div className="bg-white rounded-[10px] p-5">
+          <div className="bg-white  xl:w-[50%] p-5 relative">
             <h1 className="text-center font-bold text-[20px]">綜合評分</h1>
-            <ResponsiveContainer width="100%" height={300}>
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data2}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis angle={18} domain={[0, 5]} />
-                <Radar
-                  name="本公司"
-                  dataKey="A"
-                  stroke="#8884d8"
-                  fill="#8884d8"
-                  fillOpacity={0.6}
+            {shrink && (
+              <svg
+                onClick={() => {
+                  setShrink(!shrink);
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6  mr-2 absolute right-2 top-6 cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
                 />
-                <Radar
-                  name="同薪平均"
-                  dataKey="B"
-                  stroke="#82ca9d"
-                  fill="#82ca9d"
-                  fillOpacity={0.6}
+              </svg>
+            )}
+            {!shrink && (
+              <svg
+                onClick={() => {
+                  setShrink(!shrink);
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6  mr-2 absolute right-2 top-6 cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
                 />
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
+              </svg>
+            )}
+            <div className={`${shrink ? "hidden" : "block"}`}>
+              <ResponsiveContainer width="100%" height={300}>
+                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data2}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" />
+                  <PolarRadiusAxis angle={18} domain={[0, 5]} />
+                  <Radar
+                    name="本公司"
+                    dataKey="A"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                    fillOpacity={0.6}
+                  />
+                  <Radar
+                    name="同薪平均"
+                    dataKey="B"
+                    stroke="#82ca9d"
+                    fill="#82ca9d"
+                    fillOpacity={0.6}
+                  />
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       )}

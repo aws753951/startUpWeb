@@ -86,7 +86,7 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
             onClick={() => {
               setIsOpen(true);
             }}
-            className="py-2 px-[100px] bg-blue-300 rounded-[10px] text-[24px] font-bold"
+            className="py-2 px-[100px] bg-purple-300 rounded-[10px] text-[24px] font-bold"
           >
             提交
           </button>
