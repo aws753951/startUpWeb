@@ -16,7 +16,6 @@ const Search = () => {
         process.env.REACT_APP_DB_URL + `/search/?companyName=${companyName}`
       );
       setCompany(companyList.data);
-      console.log(companyList.data);
     };
     getCompany();
   }, [companyName]);

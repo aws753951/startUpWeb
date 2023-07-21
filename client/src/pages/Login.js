@@ -19,7 +19,6 @@ const Login = () => {
   const normalLogin = async (e) => {
     try {
       e.preventDefault();
-      console.log(e.target.value);
       let response = await axios.post(
         `${process.env.REACT_APP_DB_URL}/auth/login`,
         {

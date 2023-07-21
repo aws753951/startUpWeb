@@ -15,7 +15,7 @@ const Nav = () => {
       <div className="flex items-center justify-between col-span-1">
         <div className="ml-5 cursor-pointer">
           <span className="text-base md:text-2xl lg:text-4xl font-bold">
-            薪水現形咒
+            也援薪自助
           </span>
         </div>
 

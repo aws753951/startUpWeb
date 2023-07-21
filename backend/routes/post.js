@@ -4,8 +4,8 @@ const Company = require("../models/company_model");
 const User = require("../models/user_model");
 
 router.get("/", (req, res) => {
-  let email = req.user.email;
-  res.send(email);
+  let { email, user_id } = req.user;
+  res.send({ email, user_id });
 });
 
 router.post("/company", async (req, res) => {
@@ -47,6 +47,34 @@ router.post("/:company_id/article", async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(403).send("article not saved");
+  }
+});
+
+router.post("/article", async (req, res) => {
+  const user_id = req.user.user_id;
+  const date = Date.now();
+  const { article_id, message } = req.body;
+  const foundUser = await User.findOne({ _id: user_id });
+  const username = foundUser.username;
+  try {
+    let result = await Post.findByIdAndUpdate(
+      { _id: article_id },
+      {
+        $push: {
+          comments: { user_id, username, message, date: date.toString() },
+        },
+      },
+
+      // 得寫在push的後面
+      { new: true }
+    );
+    if (!result) {
+      res.status(403).send("cant find or update article");
+    }
+    res.status(200).send("message successfully saved");
+  } catch (e) {
+    console.log(e);
+    res.status(403).send("message not saved");
   }
 });
 

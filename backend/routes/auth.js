@@ -14,17 +14,22 @@ router.get(
     try {
       const email = req.user.emails[0].value;
       const foundUser = await User.findOne({ email });
+      let savedUser;
       if (!foundUser) {
         console.log("no user");
         let newUser = new User({ email });
-        await newUser.save();
+        savedUser = await newUser.save();
       } else {
         console.log(foundUser);
       }
 
-      const token = jwt.sign({ email }, process.env.PASSPORT_SECRET, {
-        expiresIn: 60 * 60 * 24,
-      });
+      const token = jwt.sign(
+        { email, user_id: savedUser._id },
+        process.env.PASSPORT_SECRET,
+        {
+          expiresIn: 60 * 60 * 24,
+        }
+      );
       res.redirect(`${process.env.CLIENT_URL}auth/setjwt/?token=JWT ${token}`);
     } catch (e) {
       console.log(e);
@@ -111,9 +116,13 @@ router.post("/login", async (req, res) => {
     }
     bcrypt.compare(password, foundUser.password, (err, result) => {
       if (result) {
-        const token = jwt.sign({ email }, process.env.PASSPORT_SECRET, {
-          expiresIn: 60 * 60 * 24,
-        });
+        const token = jwt.sign(
+          { email, user_id: foundUser._id },
+          process.env.PASSPORT_SECRET,
+          {
+            expiresIn: 60 * 60 * 24,
+          }
+        );
         return res.status(200).send(`JWT ${token}`);
       } else {
         return res.status(401).send("user's password is wrong ");

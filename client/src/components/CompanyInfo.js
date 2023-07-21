@@ -17,6 +17,7 @@ const CompanyInfo = ({ meet, setMeet }) => {
         process.env.REACT_APP_DB_URL + `/search/?companyId=${companyId}`
       );
       setDetails(companyDetails.data);
+      console.log(companyDetails.data);
     };
     getSpecificCompany();
   }, [companyId]);
