@@ -33,6 +33,7 @@ const Chat = () => {
   const navigate = useNavigate();
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+    console.log(jwt_token);
     if (!jwt_token) {
       window.alert("要留言請先登入");
       navigate("/login");

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+// 處理googlelogin
 const Blank = () => {
   const navigate = useNavigate();
   const location = useLocation();

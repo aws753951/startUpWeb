@@ -14,17 +14,17 @@ router.get(
     try {
       const email = req.user.emails[0].value;
       const foundUser = await User.findOne({ email });
-      let savedUser;
+      let processUser;
       if (!foundUser) {
         console.log("no user");
         let newUser = new User({ email });
-        savedUser = await newUser.save();
+        processUser = await newUser.save();
       } else {
-        console.log(foundUser);
+        processUser = foundUser;
       }
 
       const token = jwt.sign(
-        { email, user_id: savedUser._id },
+        { email, user_id: processUser._id },
         process.env.PASSPORT_SECRET,
         {
           expiresIn: 60 * 60 * 24,

@@ -1,52 +1,69 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/zh-tw";
 
-const Comments = ({ comments, article_id }) => {
+const Comments = ({ comments, setComments, article_id }) => {
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const [sorting, setSorting] = useState(false);
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
-    if (message) {
-      await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/article",
-        {
-          article_id,
-          message,
-        },
-
-        // headers得寫在body後面
-        {
-          headers: {
-            Authorization: jwt_token,
+    if (!jwt_token) {
+      window.alert("要留言請先登入");
+      navigate("/login");
+      return;
+    }
+    try {
+      if (message) {
+        let response = await axios.post(
+          process.env.REACT_APP_DB_URL + "/post/article",
+          {
+            article_id,
+            message,
           },
+
+          // headers得寫在body後面
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+        setMessage("");
+        if (!sorting) {
+          setComments([...comments, response.data]);
+        } else {
+          setComments([response.data, ...comments]);
         }
-      );
+      }
+    } catch (e) {
+      console.log(e);
+      if (e.response.data === "Unauthorized") {
+        window.alert("session錯誤，請你重新登入");
+        navigate("/login");
+        return;
+      }
     }
   };
-  // const comments = [
-  //   {
-  //     id: 1,
-  //     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-  //     name: "John Doe",
-  //     userId: 1,
-  //     profilePicture:
-  //       "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  //   },
-  //   {
-  //     id: 2,
-  //     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-  //     name: "Jane Doe",
-  //     userId: 2,
-  //     profilePicture:
-  //       "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  //   },
-  // ];
+
+  const handleSort = () => {
+    setSorting(!sorting);
+    comments.reverse();
+  };
 
   return (
     <div>
       <div className="comments px-[20px] pb-[20px] max-h-[500px] overflow-scroll no-scrollbar">
+        <div
+          onClick={handleSort}
+          className="text-end cursor-pointer font-bold text-gray-500"
+        >
+          {!sorting ? "最新留言" : "預設排序"}
+        </div>
+
         {comments &&
           comments.map((comment, key) => (
             <div
@@ -87,6 +104,7 @@ const Comments = ({ comments, article_id }) => {
             onChange={(e) => {
               setMessage(e.target.value);
             }}
+            value={message}
             className="w-full outline-none bg-slate-200 p-[10px] rounded-[10px]  overflow-hidden resize-none"
             placeholder="你在想甚麼?"
           />

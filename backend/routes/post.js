@@ -50,6 +50,7 @@ router.post("/:company_id/article", async (req, res) => {
   }
 });
 
+// 針對特定文章進行留言
 router.post("/article", async (req, res) => {
   const user_id = req.user.user_id;
   const date = Date.now();
@@ -71,10 +72,74 @@ router.post("/article", async (req, res) => {
     if (!result) {
       res.status(403).send("cant find or update article");
     }
-    res.status(200).send("message successfully saved");
+    res.status(200).send({ user_id, username, message, date: date.toString() });
   } catch (e) {
     console.log(e);
     res.status(403).send("message not saved");
+  }
+});
+
+// 針對特定文章進行同意或不同意
+router.post("/article/agree", async (req, res) => {
+  try {
+    const user_id = req.user.user_id;
+    const { article_id } = req.body;
+    const AgreePost = await Post.findOne({ _id: article_id, good: user_id });
+    const DisAgreePost = await Post.findOne({ _id: article_id, bad: user_id });
+    console.log(user_id, article_id);
+    if (AgreePost && !DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $pull: { good: user_id } }
+      );
+    } else if (!AgreePost && DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $pull: { bad: user_id }, $push: { good: user_id } }
+      );
+    } else if (!AgreePost && !DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $push: { good: user_id } }
+      );
+    }
+
+    res.status(200).send("handle agree successfully");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("something wrong with sending agree");
+  }
+});
+
+// 針對特定文章進行同意或不同意
+router.post("/article/disagree", async (req, res) => {
+  try {
+    const user_id = req.user.user_id;
+    const { article_id } = req.body;
+    const AgreePost = await Post.findOne({ _id: article_id, good: user_id });
+    const DisAgreePost = await Post.findOne({ _id: article_id, bad: user_id });
+
+    if (AgreePost && !DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $pull: { good: user_id }, $push: { bad: user_id } }
+      );
+    } else if (!AgreePost && DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $pull: { bad: user_id } }
+      );
+    } else if (!AgreePost && !DisAgreePost) {
+      await Post.findOneAndUpdate(
+        { _id: article_id },
+        { $push: { bad: user_id } }
+      );
+    }
+
+    res.status(200).send("handle disagree successfully");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("something wrong with sending disagree");
   }
 });
 
