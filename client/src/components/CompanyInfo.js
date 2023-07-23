@@ -28,7 +28,7 @@ const CompanyInfo = ({ meet, setMeet }) => {
       {details && (
         <View meet={meet} setMeet={setMeet} write={write} setWrite={setWrite} />
       )}
-      <div className="flex flex-col md:mx-[10px] gap-[20px] mt-2">
+      <div className="flex flex-col md:mx-[10px] gap-[10px] mt-2">
         {details &&
           details.jobposts &&
           details.jobposts.map((data, i) => (

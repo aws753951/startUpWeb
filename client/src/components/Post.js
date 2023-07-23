@@ -5,7 +5,22 @@ import Comments from "./Comments";
 import moment from "moment";
 import "moment/locale/zh-tw";
 import axios from "axios";
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  Legend,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Label,
+} from "recharts";
 
+// 該data為jobposts當中每一則內容
 const Post = ({ data }) => {
   const navigate = useNavigate();
   const user_id = JSON.parse(localStorage.getItem("session_user_id"));
@@ -17,8 +32,40 @@ const Post = ({ data }) => {
   let [goodCount, setGoodCount] = useState(data.good.length);
   let [badCount, setBadCount] = useState(data.bad.length);
 
+  let [openDetail, setOpenDetail] = useState(false);
+
   let [commentOpen, setCommentOpen] = useState(false);
   let [comments, setComments] = useState("");
+
+  const data_ = [
+    {
+      subject: "滿意度",
+      A: data.statisfication,
+      fullMark: 5,
+    },
+    {
+      subject: "企業氛圍",
+      A: data.environ,
+      fullMark: 5,
+    },
+
+    {
+      subject: "輕鬆程度",
+      A: data.easy,
+      fullMark: 5,
+    },
+    {
+      subject: "Loading",
+      A: data.loading,
+      fullMark: 5,
+    },
+    {
+      subject: "加班程度",
+      A: data.addworkhour / 4,
+      fullMark: 5,
+    },
+  ];
+
   const handleGetMessage = async () => {
     setCommentOpen(!commentOpen);
 
@@ -112,9 +159,9 @@ const Post = ({ data }) => {
 
   return (
     <div className={`shadow-lg rounded-[10px] bg-white overflow-hidden`}>
-      <div className="container  p-[20px]">
-        <div className="user flex justify-between items-center pb-2">
-          <div className="userInfo flex items-center  gap-[20px]">
+      <div className="container p-[20px]">
+        <div className="flex justify-between items-center pb-2">
+          <div className="flex items-center  gap-[10px]">
             <img
               className="w-[40px] h-[40px] object-cover rounded-full"
               src={require("../assets/photo.png")}
@@ -134,8 +181,65 @@ const Post = ({ data }) => {
               </div>
             </div>
           </div>
+          <div className="flex flex-col items-end gap-2">
+            <div>職務:{data.jobname}</div>
+            <div>年薪:{data.yearwage}萬</div>
+            <div
+              onClick={() => {
+                setOpenDetail(!openDetail);
+              }}
+              className="cursor-pointer font-bold bg-blue-300 p-1 text-center w-[90px] rounded-[10px]"
+            >
+              {openDetail ? "收起細節" : "其他細節"}
+            </div>
+          </div>
         </div>
-        <div className="content pb-2 text-[20px] border-b-4">
+
+        {openDetail && (
+          <div
+            className={`mb-2 bg-blue-100 rounded-[10px] p-2 flex justify-between `}
+          >
+            <div>
+              <div>職務等級: {data.level}</div>
+              <div>相關年資: {data.seniority} 年</div>
+              <div>現職年資: {data.curseniority} 年</div>
+              <div>月薪: {data.monthwage} 萬</div>
+              <div>日工時: {data.workhour} 小時</div>
+              <div>月加班: {data.addworkhour} 小時</div>
+            </div>
+            <div className="  w-[150px]  relative ">
+              <ResponsiveContainer
+                className={"absolute top-0 right-0"}
+                width="150%"
+                height={120}
+              >
+                <RadarChart
+                  cx="50%"
+                  cy="50%"
+                  outerRadius="80%"
+                  className="text-[10px]"
+                  data={data_}
+                >
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" />
+                  <PolarRadiusAxis angle={18} domain={[0, 5]} />
+                  <Radar
+                    name="本公司"
+                    dataKey="A"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                    fillOpacity={0.6}
+                  />
+
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        <div className="font-bold break-words text-[30px]">{data.oneword}</div>
+        <div className="break-words whitespace-pre-line content pb-2 text-[20px] border-b-4">
           <p>{data.experience}</p>
         </div>
         <div className="info flex items-center gap-[20px] pt-2">

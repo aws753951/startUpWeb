@@ -42,7 +42,12 @@ router.post("/:company_id/article", async (req, res) => {
     let object = { ...req.body, user: id, username, company: company_id };
 
     const newPost = new Post(object);
-    await newPost.save();
+    let savedPost = await newPost.save();
+
+    await Company.findOneAndUpdate(
+      { _id: company_id },
+      { $push: { jobposts: savedPost._id } }
+    );
     res.status(200).send("article successfully saved");
   } catch (e) {
     console.log(e);
