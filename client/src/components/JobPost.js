@@ -2,8 +2,10 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextareaAutosize from "react-textarea-autosize";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const JobPost = ({ isOpen, setIsOpen }) => {
+const JobPost = ({ companyId, isOpen, setIsOpen }) => {
+  const navigate = useNavigate();
   let [jobname, setJobname] = useState("");
   let [level, setLevel] = useState("");
   let [seniority, setSeniority] = useState("");
@@ -15,12 +17,52 @@ const JobPost = ({ isOpen, setIsOpen }) => {
   let [easy, setEasy] = useState("");
   let [loading, setLoading] = useState("");
   let [environ, setEnviron] = useState("");
-  let [statisfication, setStatisfication] = useState("");
+  let [satisfaction, setSatisfaction] = useState("");
   let [experience, setExperience] = useState("");
   let [oneword, setOneword] = useState("");
-
   const handleSubmit = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+    if (!jwt_token) {
+      window.alert("要Po文，請先登入");
+      navigate("/login");
+      return;
+    }
+    try {
+      await axios.post(
+        process.env.REACT_APP_DB_URL + "/post/article/post",
+        {
+          companyId,
+          jobname,
+          level,
+          seniority,
+          curseniority,
+          monthwage,
+          yearwage,
+          workhour,
+          addworkhour,
+          easy,
+          loading,
+          environ,
+          satisfaction,
+          experience,
+          oneword,
+        },
+        {
+          headers: {
+            Authorization: jwt_token,
+          },
+        }
+      );
+      window.alert("已經發文成功，幫你導回公司頁面");
+      navigate(0);
+    } catch (e) {
+      console.log(e);
+      if (e.response.data === "Unauthorized") {
+        window.alert("session錯誤，請你重新登入");
+        navigate("/login");
+        return;
+      }
+    }
   };
 
   return (
@@ -212,7 +254,7 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <div className="flex-grow">
             <input
               onChange={(e) => {
-                setStatisfication(e.target.value);
+                setSatisfaction(e.target.value);
               }}
               placeholder="1~5，你推不推薦?"
               type="number"

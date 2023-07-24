@@ -19,11 +19,21 @@ import {
 import JobPost from "./JobPost";
 import MeetPost from "./MeetPost";
 
-const View = ({ meet, setMeet, write, setWrite }) => {
+const View = ({
+  companyId,
+  evaluation,
+  wageandseniority,
+  companyName,
+  meet,
+  setMeet,
+  write,
+  setWrite,
+}) => {
   const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
   let [shrink, setShrink] = useState(true);
 
+  // po文前先檢查，避免填完才發現不能po文
   const handlePost = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
@@ -46,49 +56,43 @@ const View = ({ meet, setMeet, write, setWrite }) => {
     }
   };
 
-  const data = [
-    { x: 100, y: 2 },
-    { x: 120, y: 1 },
-    { x: 170, y: 3 },
-    { x: 140, y: 2.5 },
-    { x: 150, y: 4 },
-    { x: 110, y: 15 },
-  ];
+  // 純粹取得薪水分布的資料
+  let data = wageandseniority ? wageandseniority.map((e) => e.data) : undefined;
 
-  const data2 = [
-    {
-      subject: "滿意度",
-      A: 1,
-      B: 3,
-      fullMark: 5,
-    },
-    {
-      subject: "企業氛圍",
-      A: 2,
-      B: 4,
-      fullMark: 5,
-    },
+  // 計算綜合評分的平均
+  function getAverage(data) {
+    let loading = 0;
+    let environ = 0;
+    let satisfaction = 0;
+    let easy = 0;
+    let addworkhour = 0;
+    data.forEach((e) => {
+      loading += e.data.loading / data.length;
+      environ += e.data.environ / data.length;
+      satisfaction += e.data.satisfaction / data.length;
+      easy += e.data.easy / data.length;
+      addworkhour += e.data.addworkhour / data.length;
+    });
 
-    {
-      subject: "輕鬆程度",
-      A: 2,
-      B: 4.4,
-      fullMark: 5,
-    },
-    {
-      subject: "Loading",
-      A: 3.5,
-      B: 1,
-      fullMark: 5,
-    },
-    {
-      subject: "加班程度",
-      A: 2.3,
-      B: 3.6,
-      fullMark: 5,
-    },
-  ];
+    return [
+      { subject: "滿意度", A: satisfaction.toFixed(1), fullMark: 5 },
+      { subject: "企業氛圍", A: environ.toFixed(1), fullMark: 5 },
+      { subject: "輕鬆程度", A: easy.toFixed(1), fullMark: 5 },
+      { subject: "Loading", A: loading.toFixed(1), fullMark: 5 },
+      { subject: "加班程度", A: (addworkhour / 4).toFixed(1), fullMark: 5 },
+    ];
+  }
+  let data2 = evaluation ? getAverage(evaluation) : undefined;
 
+  // 計算平均年薪
+  function getWage(data) {
+    let wage = 0;
+    data.forEach((e) => {
+      wage += e.yearwage / data.length;
+    });
+    return wage.toFixed(0);
+  }
+  let data3 = data ? getWage(data) : undefined;
   return (
     <div className="md:mx-[10px]  mt-2 ">
       {!write && (
@@ -143,7 +147,7 @@ const View = ({ meet, setMeet, write, setWrite }) => {
                     left: 15,
                   }}
                 >
-                  <XAxis type="number" dataKey="x" name="薪水" unit="萬">
+                  <XAxis type="number" dataKey="yearwage" name="薪水" unit="萬">
                     <Label
                       className="font-bold"
                       value="年薪"
@@ -152,7 +156,12 @@ const View = ({ meet, setMeet, write, setWrite }) => {
                     />
                   </XAxis>
 
-                  <YAxis type="number" dataKey="y" name="相關年資" unit="年">
+                  <YAxis
+                    type="number"
+                    dataKey="seniority"
+                    name="相關年資"
+                    unit="年"
+                  >
                     <Label
                       className="font-bold"
                       value="相關年資"
@@ -219,13 +228,7 @@ const View = ({ meet, setMeet, write, setWrite }) => {
                     fill="#8884d8"
                     fillOpacity={0.6}
                   />
-                  <Radar
-                    name="同薪平均"
-                    dataKey="B"
-                    stroke="#82ca9d"
-                    fill="#82ca9d"
-                    fillOpacity={0.6}
-                  />
+
                   <Legend />
                 </RadarChart>
               </ResponsiveContainer>
@@ -255,9 +258,15 @@ const View = ({ meet, setMeet, write, setWrite }) => {
           </div>
         )}
         <div className="flex-2 w-[40%] xl:w-[60%] ">
-          <div className="text-center font-bold text-[30px]">某某公司</div>
-          <div className="text-center">薪資中位數: 12萬</div>
-          <div className="text-center">平均滿意度: 4.6</div>
+          <div className="text-center font-bold text-[20px]">
+            {companyName ? companyName : "加載中..."}
+          </div>
+          <div className="text-center">
+            薪資平均數: {data3 ? data3 : "加載中..."} 萬
+          </div>
+          <div className="text-center">
+            平均滿意度: {data2 ? data2[0].A : "加載中..."} 分
+          </div>
         </div>
         {!meet && (
           <div
@@ -280,8 +289,12 @@ const View = ({ meet, setMeet, write, setWrite }) => {
           </div>
         )}
       </div>
-      {write && !meet && <JobPost isOpen={isOpen} setIsOpen={setIsOpen} />}
-      {write && meet && <MeetPost isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {write && !meet && (
+        <JobPost companyId={companyId} isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
+      {write && meet && (
+        <MeetPost companyId={companyId} isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
     </div>
   );
 };

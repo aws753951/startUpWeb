@@ -24,30 +24,51 @@ router.post("/company", async (req, res) => {
   }
 });
 
-router.post("/:company_id/article", async (req, res) => {
+router.post("/article/post", async (req, res) => {
   try {
     // 必定放joi
-    const { company_id } = req.params;
-    let foundCompany = await Company.findOne({ _id: company_id });
+    let foundCompany = await Company.findOne({ _id: req.body.companyId });
     if (!foundCompany) {
       res.status(403).send("company not found");
     }
     const { email } = req.user;
     let foundUser = await User.findOne({ email });
     if (!foundUser) {
-      res.status(403).send("email not found");
+      res.status(403).send("user not found");
     }
-
+    console.log(req.body);
     const { id, username } = foundUser;
-    let object = { ...req.body, user: id, username, company: company_id };
+    let object = { ...req.body, user: id, username };
 
     const newPost = new Post(object);
     let savedPost = await newPost.save();
 
     await Company.findOneAndUpdate(
-      { _id: company_id },
-      { $push: { jobposts: savedPost._id } }
+      { _id: req.body.companyId },
+      {
+        $push: {
+          jobposts: savedPost._id,
+          wageandseniority: {
+            article_id: savedPost._id,
+            data: {
+              yearwage: req.body.yearwage,
+              seniority: req.body.seniority,
+            },
+          },
+          evaluation: {
+            article_id: savedPost._id,
+            data: {
+              loading: req.body.loading,
+              environ: req.body.environ,
+              satisfaction: req.body.satisfaction,
+              easy: req.body.easy,
+              addworkhour: req.body.addworkhour,
+            },
+          },
+        },
+      }
     );
+
     res.status(200).send("article successfully saved");
   } catch (e) {
     console.log(e);
@@ -91,7 +112,6 @@ router.post("/article/agree", async (req, res) => {
     const { article_id } = req.body;
     const AgreePost = await Post.findOne({ _id: article_id, good: user_id });
     const DisAgreePost = await Post.findOne({ _id: article_id, bad: user_id });
-    console.log(user_id, article_id);
     if (AgreePost && !DisAgreePost) {
       await Post.findOneAndUpdate(
         { _id: article_id },

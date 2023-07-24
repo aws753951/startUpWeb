@@ -26,7 +26,17 @@ const CompanyInfo = ({ meet, setMeet }) => {
   return (
     <div className="col-span-5 md:col-span-3">
       {details && (
-        <View meet={meet} setMeet={setMeet} write={write} setWrite={setWrite} />
+        <View
+          // 提供給寫工作經驗時作為req.body包著的東西
+          companyId={companyId}
+          evaluation={details.evaluation}
+          wageandseniority={details.wageandseniority}
+          companyName={details.name}
+          meet={meet}
+          setMeet={setMeet}
+          write={write}
+          setWrite={setWrite}
+        />
       )}
       <div className="flex flex-col md:mx-[10px] gap-[10px] mt-2">
         {details &&

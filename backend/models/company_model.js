@@ -24,6 +24,21 @@ const companySchema = new Schema(
         ref: "Post", // "Post" 是 postSchema 的集合名稱
       },
     ],
+    wageandseniority: [
+      { article_id: String, data: { yearwage: Number, seniority: Number } },
+    ],
+    evaluation: [
+      {
+        article_id: String,
+        data: {
+          loading: Number,
+          environ: Number,
+          satisfaction: Number,
+          easy: Number,
+          addworkhour: Number,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -35,7 +35,7 @@ const Post = ({ data }) => {
   const data_ = [
     {
       subject: "滿意度",
-      A: data.statisfication,
+      A: data.satisfaction,
       fullMark: 5,
     },
     {
@@ -78,17 +78,6 @@ const Post = ({ data }) => {
 
   const handleAgree = async () => {
     try {
-      await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/article/agree",
-        {
-          article_id: data._id,
-        },
-        {
-          headers: {
-            Authorization: jwt_token,
-          },
-        }
-      );
       if (bad) {
         setBad(!bad);
         setBadCount((prev) => {
@@ -105,16 +94,8 @@ const Post = ({ data }) => {
         });
       }
       setGood(!good);
-    } catch (e) {
-      console.log(e);
-      window.alert("要按讚請先登入");
-      navigate("/login");
-    }
-  };
-  const handleDisAgree = async () => {
-    try {
       await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/article/disagree",
+        process.env.REACT_APP_DB_URL + "/post/article/agree",
         {
           article_id: data._id,
         },
@@ -124,6 +105,15 @@ const Post = ({ data }) => {
           },
         }
       );
+    } catch (e) {
+      console.log(e);
+      window.alert("要按讚請先登入");
+      navigate("/login");
+    }
+  };
+
+  const handleDisAgree = async () => {
+    try {
       // 計算數量
       if (good) {
         setGood(!good);
@@ -140,9 +130,19 @@ const Post = ({ data }) => {
           return prev + 1;
         });
       }
-
       // 調整現在按下的狀況
       setBad(!bad);
+      await axios.post(
+        process.env.REACT_APP_DB_URL + "/post/article/disagree",
+        {
+          article_id: data._id,
+        },
+        {
+          headers: {
+            Authorization: jwt_token,
+          },
+        }
+      );
     } catch (e) {
       console.log(e);
       window.alert("要倒讚請先登入");
