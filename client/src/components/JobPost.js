@@ -1,8 +1,28 @@
-import { Fragment } from "react";
+import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextareaAutosize from "react-textarea-autosize";
+import axios from "axios";
 
 const JobPost = ({ isOpen, setIsOpen }) => {
+  let [jobname, setJobname] = useState("");
+  let [level, setLevel] = useState("");
+  let [seniority, setSeniority] = useState("");
+  let [curseniority, setCurseniority] = useState("");
+  let [monthwage, setMonthwage] = useState("");
+  let [yearwage, setYearwage] = useState("");
+  let [workhour, setWorkhour] = useState("");
+  let [addworkhour, setAddworkhour] = useState("");
+  let [easy, setEasy] = useState("");
+  let [loading, setLoading] = useState("");
+  let [environ, setEnviron] = useState("");
+  let [statisfication, setStatisfication] = useState("");
+  let [experience, setExperience] = useState("");
+  let [oneword, setOneword] = useState("");
+
+  const handleSubmit = async () => {
+    let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+  };
+
   return (
     <>
       <div className="bg-white gap-[20px] flex flex-col  rounded-[10px] p-5 mt-2 ">
@@ -11,6 +31,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">職務名稱:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setJobname(e.target.value);
+              }}
               placeholder="後端工程師 等"
               className="w-full outline-none p-2 text-[24px] bg-slate-100"
               required
@@ -21,6 +44,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">職務等級:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setLevel(e.target.value);
+              }}
               placeholder="Junior / IC2 等"
               className="w-full outline-none p-2 text-[24px] bg-slate-100"
               required
@@ -31,6 +57,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">相關年資:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setSeniority(e.target.value);
+              }}
               placeholder="0~20 年"
               type="number"
               min={0}
@@ -45,6 +74,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">現職年資:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setCurseniority(e.target.value);
+              }}
               placeholder="0~20 年"
               type="number"
               min={0}
@@ -60,6 +92,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">月薪(萬):</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setMonthwage(e.target.value);
+              }}
               placeholder="台幣計價，美金1:30"
               type="number"
               min={0}
@@ -74,6 +109,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">年薪(萬):</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setYearwage(e.target.value);
+              }}
               placeholder="(算整包)，台幣計價"
               type="number"
               min={0}
@@ -88,6 +126,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">每日工時:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setWorkhour(e.target.value);
+              }}
               placeholder="(平均)小時"
               type="number"
               min={1}
@@ -102,6 +143,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">每月加班工時:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setAddworkhour(e.target.value);
+              }}
               placeholder="(總計)小時"
               type="number"
               min={0}
@@ -116,6 +160,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">輕鬆程度:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setEasy(e.target.value);
+              }}
               placeholder="1~5，撇除自身能力"
               type="number"
               min={1}
@@ -130,6 +177,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">Loading程度:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setLoading(e.target.value);
+              }}
               placeholder="1~5，越不合理越高"
               type="number"
               min={1}
@@ -144,6 +194,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">企業氛圍:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setEnviron(e.target.value);
+              }}
               placeholder="1~5，主管態度好，公司福利等"
               type="number"
               min={1}
@@ -158,6 +211,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">整體滿意度:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setStatisfication(e.target.value);
+              }}
               placeholder="1~5，你推不推薦?"
               type="number"
               min={1}
@@ -172,6 +228,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">工作心得:</span>
           <div className="flex-grow">
             <TextareaAutosize
+              onChange={(e) => {
+                setExperience(e.target.value);
+              }}
               placeholder="請誠實分享，誤加水造謠等，最多1萬字"
               maxLength="10000"
               className="w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
@@ -182,6 +241,9 @@ const JobPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">一句話說明此公司:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setOneword(e.target.value);
+              }}
               placeholder="50字內，非必填"
               className="w-full outline-none p-2 text-[24px] bg-slate-100"
               maxLength="50"
@@ -255,6 +317,7 @@ const JobPost = ({ isOpen, setIsOpen }) => {
                       回頭是岸
                     </button>
                     <button
+                      onClick={handleSubmit}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-black hover:bg-red-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >

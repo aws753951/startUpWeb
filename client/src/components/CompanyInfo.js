@@ -31,6 +31,7 @@ const CompanyInfo = ({ meet, setMeet }) => {
       <div className="flex flex-col md:mx-[10px] gap-[10px] mt-2">
         {details &&
           details.jobposts &&
+          !write &&
           details.jobposts.map((data, i) => (
             <Post data={data} key={i} write={write} />
           ))}

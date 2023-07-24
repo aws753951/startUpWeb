@@ -6,17 +6,28 @@ const Home = () => {
   useEffect(() => {
     const getUserId = async () => {
       let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
-      if (jwt_token) {
-        const object = await axios.get(process.env.REACT_APP_DB_URL + "/post", {
-          headers: {
-            Authorization: jwt_token,
-          },
-        });
-        const session_user_id = object.data.user_id;
-        localStorage.setItem(
-          "session_user_id",
-          JSON.stringify(session_user_id)
-        );
+      try {
+        if (jwt_token) {
+          const object = await axios.get(
+            process.env.REACT_APP_DB_URL + "/post",
+            {
+              headers: {
+                Authorization: jwt_token,
+              },
+            }
+          );
+          const session_user_id = object.data.user_id;
+          localStorage.setItem(
+            "session_user_id",
+            JSON.stringify(session_user_id)
+          );
+        }
+      } catch (e) {
+        console.log(e);
+        if (e.response.data === "Unauthorized") {
+          localStorage.removeItem("jwt_token");
+          localStorage.removeItem("session_user_id");
+        }
       }
     };
 

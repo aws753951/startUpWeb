@@ -1,4 +1,6 @@
 import { React, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Radar,
   RadarChart,
@@ -18,8 +20,32 @@ import JobPost from "./JobPost";
 import MeetPost from "./MeetPost";
 
 const View = ({ meet, setMeet, write, setWrite }) => {
+  const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
   let [shrink, setShrink] = useState(true);
+
+  const handlePost = async () => {
+    let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+    if (!jwt_token) {
+      localStorage.removeItem("session_user_id");
+      window.alert("要po文，請先登入");
+      navigate("/login");
+    } else {
+      try {
+        await axios.get(`${process.env.REACT_APP_DB_URL}/post`, {
+          headers: {
+            Authorization: jwt_token,
+          },
+        });
+        setWrite(!write);
+      } catch (e) {
+        console.log(e);
+        window.alert("session過期，請重新登入");
+        navigate("/login");
+      }
+    }
+  };
+
   const data = [
     { x: 100, y: 2 },
     { x: 120, y: 1 },
@@ -235,9 +261,7 @@ const View = ({ meet, setMeet, write, setWrite }) => {
         </div>
         {!meet && (
           <div
-            onClick={() => {
-              setWrite(!write);
-            }}
+            onClick={handlePost}
             className="bg-blue-300  flex-1 flex justify-center items-center rounded-[20px] cursor-pointer"
           >
             <div className="text-[24px] font-bold text-center">
@@ -247,9 +271,7 @@ const View = ({ meet, setMeet, write, setWrite }) => {
         )}
         {meet && (
           <div
-            onClick={() => {
-              setWrite(!write);
-            }}
+            onClick={handlePost}
             className="bg-purple-300  flex-1 flex justify-center items-center rounded-[20px] cursor-pointer"
           >
             <div className="text-[24px] font-bold text-center">
