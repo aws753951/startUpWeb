@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 
-const Home = () => {
+const Home = ({ setUser }) => {
   // 給瀏覽器賦予使用者的ID
   useEffect(() => {
     const getUserId = async () => {
@@ -21,6 +21,7 @@ const Home = () => {
             "session_user_id",
             JSON.stringify(session_user_id)
           );
+          setUser(session_user_id);
         }
       } catch (e) {
         console.log(e);
@@ -32,7 +33,7 @@ const Home = () => {
     };
 
     getUserId();
-  }, []);
+  }, [setUser]);
   return (
     <div className="col-span-5 md:col-span-3 ">
       <div className=" border-dashed border-2 border-indigo-600">123</div>

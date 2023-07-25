@@ -1,9 +1,13 @@
 import React from "react";
 import Leftposts from "./Leftposts";
 
-const Leftbar = () => {
+const Leftbar = ({ expandLeft }) => {
   return (
-    <div className="hidden xl:col-span-1 xl:block scrollset ">
+    <div
+      className={`${
+        expandLeft ? "col-span-5" : "hidden scrollset"
+      } xl:col-span-1 xl:block `}
+    >
       <Leftposts />
     </div>
   );

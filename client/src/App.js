@@ -14,29 +14,39 @@ import Home from "./pages/Home";
 import Aritcle from "./pages/Aritcle";
 
 const App = () => {
+  const [meet, setMeet] = useState(false);
+  const [expandLeft, setExpandLeft] = useState(false);
+  const [expandRight, setExpandRight] = useState(false);
+  const [user, setUser] = useState("");
   const Layout = ({ meet }) => {
     return (
       <div>
-        <Nav />
+        <Nav
+          user={user}
+          expandLeft={expandLeft}
+          setExpandLeft={setExpandLeft}
+          expandRight={expandRight}
+          setExpandRight={setExpandRight}
+        />
         <div
           className={`grid grid-cols-5 ${
             meet ? "bg-purple-100" : "bg-blue-100"
           }`}
         >
-          <Leftbar />
-          <Outlet />
-          <Rightbar />
+          {!expandRight && <Leftbar expandLeft={expandLeft} />}
+          {!expandRight && <Outlet />}
+          <Rightbar expandRight={expandRight} />
         </div>
       </div>
     );
   };
-  const [meet, setMeet] = useState(false);
+
   return (
     <BrowserRouter>
       <Routes>
         {/* 調整背景 */}
         <Route path="/" element={<Layout meet={meet} />}>
-          <Route index element={<Home />} />
+          <Route index element={<Home setUser={setUser} />} />
           <Route path="search" element={<Search />} />
           <Route
             path="company"

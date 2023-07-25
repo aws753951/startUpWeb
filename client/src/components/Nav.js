@@ -1,30 +1,56 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Nav = () => {
+const Nav = ({
+  user,
+  expandLeft,
+  setExpandLeft,
+  expandRight,
+  setExpandRight,
+}) => {
   const navigate = useNavigate();
   let [companyName, setCompanyName] = useState("");
+
   const handleSearch = () => {
     if (companyName) {
       navigate(`/search/?companyName=${companyName}`);
+      setCompanyName("");
+    }
+  };
+
+  const handleLogin = () => {
+    if (user) {
+      window.alert("幫你登出了");
+      localStorage.removeItem("jwt_token");
+      localStorage.removeItem("session_user_id");
+      navigate("/");
+      window.location.reload();
+    } else {
+      window.alert("幫你導向登入頁面");
+      navigate("/login");
     }
   };
 
   return (
-    <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[90px] w-full">
-      <div className="flex items-center justify-between col-span-1">
+    <div className="shadow-sm grid grid-cols-2 md:grid-cols-3 items-center sticky z-20 bg-white top-0 border-b-2 h-[90px] w-full">
+      <div className="flex items-center  col-span-1">
         <div
           onClick={() => {
             navigate("/");
           }}
           className="ml-5 cursor-pointer"
         >
-          <span className="text-base md:text-2xl lg:text-4xl font-bold">
-            也援薪自助
-          </span>
+          <span className="md:text-4xl font-bold">也援薪自助</span>
         </div>
 
-        <div className="px-4 cursor-pointer xl:hidden" id="burger">
+        {/* 漢堡 */}
+        <div
+          onClick={() => {
+            setExpandLeft(!expandLeft);
+          }}
+          className="px-4 cursor-pointer xl:hidden"
+          id="burger"
+        >
           <svg
             className="w-6 h-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +68,7 @@ const Nav = () => {
         </div>
       </div>
 
-      <div className="col-span-1 ">
+      <div className="hidden md:block md:col-span-1">
         <div className="searchBar flex items-center w-full h-[66px] rounded-full bg-slate-200 overflow-hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +89,7 @@ const Nav = () => {
             onChange={(e) => {
               setCompanyName(e.target.value);
             }}
+            value={companyName}
             placeholder="搜尋..."
             className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[36px] "
           />
@@ -74,7 +101,7 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-[48px] h-[48px] mx-5 text-3xl"
+            className="w-[48px] h-[48px] mx-5 text-3xl cursor-pointer"
           >
             <path
               strokeLinecap="round"
@@ -87,7 +114,12 @@ const Nav = () => {
 
       <div className="col-span-1 ">
         <div className=" flex items-center justify-end ">
-          <div className="mx-2">
+          <div
+            onClick={() => {
+              setExpandRight(!expandRight);
+            }}
+            className="mx-2 cursor-pointer"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -101,24 +133,69 @@ const Nav = () => {
               />
             </svg>
           </div>
-          <div className="">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-8 h-8 mx-2"
-            >
-              <path d="M5.85 3.5a.75.75 0 00-1.117-1 9.719 9.719 0 00-2.348 4.876.75.75 0 001.479.248A8.219 8.219 0 015.85 3.5zM19.267 2.5a.75.75 0 10-1.118 1 8.22 8.22 0 011.987 4.124.75.75 0 001.48-.248A9.72 9.72 0 0019.266 2.5z" />
-              <path
-                fillRule="evenodd"
-                d="M12 2.25A6.75 6.75 0 005.25 9v.75a8.217 8.217 0 01-2.119 5.52.75.75 0 00.298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 107.48 0 24.583 24.583 0 004.83-1.244.75.75 0 00.298-1.205 8.217 8.217 0 01-2.118-5.52V9A6.75 6.75 0 0012 2.25zM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 004.496 0l.002.1a2.25 2.25 0 11-4.5 0z"
-                clipRule="evenodd"
+
+          <div
+            onClick={handleLogin}
+            className="overflow-hidden mr-5 cursor-pointer"
+          >
+            {user && (
+              <img
+                alt="已登入"
+                src={require("../assets/photo.png")}
+                className="w-10 h-10 object-cover rounded-full"
               />
-            </svg>
+            )}
+            {!user && (
+              <img
+                alt="未登入"
+                src={require("../assets/noAvatar.png")}
+                className="w-10 h-10 object-cover rounded-full"
+              />
+            )}
           </div>
-          <div className="overflow-hidden mr-5">
-            <img alt="" className="w-12 h-12 object-cover" />
-          </div>
+        </div>
+      </div>
+      <div className="col-span-2 mx-5 md:hidden">
+        <div className="searchBar flex items-center w-full h-[36px] rounded-full bg-slate-200 overflow-hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-[24px] h-[24px] mx-5 text-[24px]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+
+          <input
+            onChange={(e) => {
+              setCompanyName(e.target.value);
+            }}
+            value={companyName}
+            placeholder="搜尋..."
+            className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[24px] "
+          />
+
+          <svg
+            onClick={handleSearch}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-[24px] h-[24px] mx-5 text-[24px] cursor-pointer"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+            />
+          </svg>
         </div>
       </div>
     </div>

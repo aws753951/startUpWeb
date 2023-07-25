@@ -10,7 +10,7 @@ export const Company = ({ data }) => {
       <Link to={`/company/?companyId=${_id}`}>
         <div className="p-[10px] gap-[10px] flex flex-col flex-wrap overflow-hidden">
           <div className="font-bold border-b-4 text-[24px]">{name}</div>
-          <div className="flex gap-[30px] text-[20px]">
+          <div className="flex gap-[10px] text-[20px]">
             <div
               onClick={(e) => {
                 e.preventDefault();
@@ -18,15 +18,15 @@ export const Company = ({ data }) => {
                 window.open(url, "_blank");
               }}
             >
-              <div className="text-black bg-orange-300 p-1 rounded-[10px]">
+              <div className="text-black text-center bg-orange-300 p-1 rounded-[10px]">
                 104連結
               </div>
             </div>
 
-            <div className="text-black bg-blue-300 p-1 rounded-[10px]">
+            <div className="text-black text-center bg-blue-300 p-1 rounded-[10px]">
               {jobposts.length} 則工作甘苦
             </div>
-            <div className="text-black bg-purple-300 p-1 rounded-[10px]">
+            <div className="text-black text-center bg-purple-300 p-1 rounded-[10px]">
               {meetposts.length} 則面試經驗
             </div>
           </div>

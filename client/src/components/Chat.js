@@ -53,7 +53,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="shadow-lg bg-white rounded-[10px] py-1 ">
+    <div className="mt-2 shadow-lg bg-white rounded-[10px] py-1 ">
       <div className="flex items-center justify-between">
         <div className="font-bold text-[24px] ml-2">社畜廣場</div>
 
@@ -64,7 +64,7 @@ const Chat = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 mr-2"
+            className="w-6 h-6 mr-2 cursor-pointer"
             onClick={() => {
               setShrink(!shrink);
             }}
@@ -83,7 +83,7 @@ const Chat = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6  mr-2"
+            className="w-6 h-6  mr-2 cursor-pointer"
             onClick={() => {
               setShrink(!shrink);
             }}
@@ -97,7 +97,7 @@ const Chat = () => {
         )}
       </div>
       <div className={` ${!shrink ? "block" : "hidden"}`}>
-        <div className="p-[10px] bg-blue-200  flex flex-col gap-[10px] h-[400px] overflow-scroll no-scrollbar">
+        <div className="p-[10px] bg-blue-200  flex flex-col gap-[10px] h-[calc(100vh-227px)] overflow-scroll no-scrollbar">
           {mes.map((c, i) => (
             <Message mes={c} key={i} own={false} />
           ))}
