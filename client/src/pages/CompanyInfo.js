@@ -1,5 +1,5 @@
-import Post from "./Post";
-import View from "./View";
+import Post from "../components/Post";
+import View from "../components/View";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -39,12 +39,16 @@ const CompanyInfo = ({ meet, setMeet }) => {
         />
       )}
       <div className="flex flex-col md:mx-[10px] gap-[10px] mt-2">
-        {details &&
-          details.jobposts &&
+        {!meet &&
           !write &&
-          details.jobposts.map((data, i) => (
-            <Post data={data} key={i} write={write} />
-          ))}
+          details &&
+          details.jobposts &&
+          details.jobposts.map((data, i) => <Post data={data} key={i} />)}
+        {meet &&
+          !write &&
+          details &&
+          details.meetposts &&
+          details.meetposts.map((data, i) => <Post data={data} key={i} />)}
       </div>
     </div>
   );

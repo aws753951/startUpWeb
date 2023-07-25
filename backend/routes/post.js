@@ -38,7 +38,12 @@ router.post("/article/post", async (req, res) => {
     }
     console.log(req.body);
     const { id, username } = foundUser;
-    let object = { ...req.body, user: id, username };
+    let object = {
+      ...req.body,
+      user: id,
+      username,
+      companyName: foundCompany.name,
+    };
 
     const newPost = new Post(object);
     let savedPost = await newPost.save();
@@ -47,7 +52,7 @@ router.post("/article/post", async (req, res) => {
       { _id: req.body.companyId },
       {
         $push: {
-          jobposts: savedPost._id,
+          jobposts: { $each: [savedPost._id], $position: 0 },
           wageandseniority: {
             article_id: savedPost._id,
             data: {

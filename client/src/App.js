@@ -9,8 +9,9 @@ import Rightbar from "./components/Rightbar";
 import Temp from "./pages/Temp";
 import Blank from "./pages/Blank";
 import Search from "./pages/Search";
-import CompanyInfo from "./components/CompanyInfo";
-import Home from "./components/Home";
+import CompanyInfo from "./pages/CompanyInfo";
+import Home from "./pages/Home";
+import Aritcle from "./pages/Aritcle";
 
 const App = () => {
   const Layout = ({ meet }) => {
@@ -41,6 +42,7 @@ const App = () => {
             path="company"
             element={<CompanyInfo meet={meet} setMeet={setMeet} />}
           />
+          <Route path="article" element={<Aritcle />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

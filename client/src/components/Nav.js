@@ -13,7 +13,12 @@ const Nav = () => {
   return (
     <div className="shadow-sm grid grid-cols-3 items-center sticky z-10 bg-white top-0 border-b-2 h-[90px] w-full">
       <div className="flex items-center justify-between col-span-1">
-        <div className="ml-5 cursor-pointer">
+        <div
+          onClick={() => {
+            navigate("/");
+          }}
+          className="ml-5 cursor-pointer"
+        >
           <span className="text-base md:text-2xl lg:text-4xl font-bold">
             也援薪自助
           </span>

@@ -5,7 +5,8 @@ const postSchema = new Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     username: { type: String },
-    company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    companyId: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
+    companyName: { type: String, required: true },
     jobname: { type: String, required: true },
     level: { type: String, required: true },
     seniority: { type: Number, required: true },

@@ -6,6 +6,7 @@ export const Company = ({ data }) => {
 
   return (
     <div className="shadow-lg rounded-[10px] bg-white ">
+      {/* 轉到companyInfo */}
       <Link to={`/company/?companyId=${_id}`}>
         <div className="p-[10px] gap-[10px] flex flex-col flex-wrap overflow-hidden">
           <div className="font-bold border-b-4 text-[24px]">{name}</div>
