@@ -1,38 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SmallPost from "./SmallPost";
-import axios from "axios";
 
-const Leftposts = () => {
-  let [newest, setNewest] = useState("");
-  let [hotest, setHotest] = useState("");
-
-  useEffect(() => {
-    const getNewest = async () => {
-      let response = await axios.get(
-        process.env.REACT_APP_DB_URL + "/search/newest"
-      );
-      setNewest(response.data);
-    };
-    getNewest();
-
-    const getHotest = async () => {
-      let response = await axios.get(
-        process.env.REACT_APP_DB_URL + "/search/hotest"
-      );
-      setHotest(response.data);
-    };
-    getHotest();
-
-    // const getConceal = async () => {
-    //   let response = await axios.get(
-    //     process.env.REACT_APP_DB_URL + "/search/conceal"
-    //   );
-    //   setConceal(response.data);
-    //   console.log(response.data);
-    // };
-    // getConceal();
-  }, []);
+const Leftposts = ({ newest, hotest }) => {
   return (
     <div className="pl-2 mt-2">
       <div className="max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">

@@ -275,7 +275,7 @@ const JobPost = ({ companyId, isOpen, setIsOpen }) => {
               }}
               placeholder="請誠實分享，誤加水造謠等，最多1萬字"
               maxLength="10000"
-              className="w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
+              className="min-h-[300px] w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
             ></TextareaAutosize>
           </div>
         </div>

@@ -90,7 +90,7 @@ const Nav = ({
               setCompanyName(e.target.value);
             }}
             value={companyName}
-            placeholder="搜尋..."
+            placeholder="搜尋公司..."
             className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[36px] "
           />
 
@@ -177,7 +177,7 @@ const Nav = ({
               setCompanyName(e.target.value);
             }}
             value={companyName}
-            placeholder="搜尋..."
+            placeholder="搜尋公司..."
             className="searchInput border-none outline-none w-5/6  bg-slate-200 text-[24px] "
           />
 

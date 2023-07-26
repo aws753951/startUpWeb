@@ -28,6 +28,7 @@ const Login = () => {
       );
       localStorage.setItem("jwt_token", JSON.stringify(response.data));
       navigate("/");
+      window.location.reload();
     } catch (e) {
       // 若失敗則會維持在login的畫面
       window.alert("帳號或密碼錯誤");

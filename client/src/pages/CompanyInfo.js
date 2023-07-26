@@ -2,29 +2,20 @@ import Post from "../components/Post";
 import View from "../components/View";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
-const CompanyInfo = ({ meet, setMeet }) => {
+const CompanyInfo = ({ details, setCompanyId, meet, setMeet }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const companyId = queryParams.get("companyId");
 
-  let [details, setDetails] = useState({});
+  const [write, setWrite] = useState(false);
 
   useEffect(() => {
-    const getSpecificCompany = async () => {
-      const companyDetails = await axios.get(
-        process.env.REACT_APP_DB_URL + `/search/?companyId=${companyId}`
-      );
-      setDetails(companyDetails.data);
-      console.log(companyDetails.data);
-    };
-    getSpecificCompany();
+    setCompanyId(companyId);
   }, [companyId]);
 
-  const [write, setWrite] = useState(false);
   return (
-    <div className="col-span-5 md:col-span-3">
+    <div className="col-span-5 md:col-span-3 ">
       {details && (
         <View
           // 提供給寫工作經驗時作為req.body包著的東西
