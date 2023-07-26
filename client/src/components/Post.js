@@ -218,16 +218,27 @@ const Post = ({ data, meet }) => {
             </div>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <div>職務:{data.jobname}</div>
-            <div>年薪:{data.yearwage}萬</div>
-            <div
-              onClick={() => {
-                setOpenDetail(!openDetail);
-              }}
-              className="cursor-pointer font-bold bg-blue-300 p-1 text-center w-[90px] rounded-[10px]"
-            >
-              {openDetail ? "收起細節" : "其他細節"}
+            <div>
+              {!meet ? "職位名稱: " : "應徵職位: "}
+              {data.jobname}
             </div>
+
+            <div>
+              {!meet ? "現職年薪: " : "前職年薪: "}
+              {data.yearwage ? data.yearwage + " 萬" : "不透露"}
+            </div>
+            {meet && <div>相關年資: {data.seniority}年</div>}
+            {meet && <div>面試滿意度: {data.satisfaction}星</div>}
+            {!meet && (
+              <div
+                onClick={() => {
+                  setOpenDetail(!openDetail);
+                }}
+                className="cursor-pointer font-bold bg-blue-300 p-1 text-center w-[90px] rounded-[10px]"
+              >
+                {openDetail ? "收起細節" : "其他細節"}
+              </div>
+            )}
           </div>
         </div>
 

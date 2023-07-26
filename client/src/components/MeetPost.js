@@ -50,115 +50,120 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
   };
   return (
     <>
-      <div className="bg-white gap-[20px] flex flex-col  rounded-[10px] p-5 mt-2 ">
-        <div className="text-[30px] font-bold text-center">面試評論</div>
-        <div className="flex items-center justify-between gap-[30px]">
-          <span className="font-bold text-[24px]">應徵職務:</span>
-          <div className="flex-grow">
-            <input
-              onChange={(e) => {
-                setJobname(e.target.value);
-              }}
-              minLength={1}
-              maxLength={50}
-              placeholder="後端工程師 等"
-              className="w-full outline-none p-2 text-[24px] bg-slate-100"
-              required
-            />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setIsOpen(true);
+        }}
+      >
+        <div className="bg-white gap-[20px] flex flex-col  rounded-[10px] p-5 mt-2 ">
+          <div className="text-[30px] font-bold text-center">面試評論</div>
+          <div className="flex items-center justify-between gap-[30px]">
+            <span className="font-bold text-[24px]">應徵職務:</span>
+            <div className="flex-grow">
+              <input
+                onChange={(e) => {
+                  setJobname(e.target.value);
+                }}
+                minLength={1}
+                maxLength={50}
+                placeholder="後端工程師 等"
+                className="w-full outline-none p-2 text-[24px] bg-slate-100"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-[30px]">
+            <span className="font-bold text-[24px]">相關年資:</span>
+            <div className="flex-grow">
+              <input
+                onChange={(e) => {
+                  setSeniority(e.target.value);
+                }}
+                placeholder="0~20 年"
+                type="number"
+                min={0}
+                max={20}
+                step="0.5"
+                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-[30px]">
+            <span className="font-bold text-[24px]">前公司年薪(萬):</span>
+            <div className="flex-grow">
+              <input
+                onChange={(e) => {
+                  setYearwage(e.target.value);
+                }}
+                placeholder="可不透露，空白即可"
+                type="number"
+                min={30}
+                max={2000}
+                step="1"
+                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-[30px]">
+            <span className="font-bold text-[24px]">面試滿意度:</span>
+            <div className="flex-grow">
+              <input
+                onChange={(e) => {
+                  setSatisfaction(e.target.value);
+                }}
+                placeholder="1~5，你推不推薦?"
+                type="number"
+                min={1}
+                max={5}
+                step="0.1"
+                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-[30px]">
+            <span className="font-bold text-[24px]">面試心得:</span>
+            <div className="flex-grow">
+              <TextareaAutosize
+                onChange={(e) => {
+                  setExperience(e.target.value);
+                }}
+                placeholder="請誠實分享，誤加水造謠等，最多1萬字"
+                minLength={1}
+                maxLength={10000}
+                className="min-h-[300px] w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
+                required
+              ></TextareaAutosize>
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-[30px]">
+            <span className="font-bold text-[24px]">一句話說明此面試:</span>
+            <div className="flex-grow">
+              <input
+                onChange={(e) => {
+                  setOneword(e.target.value);
+                }}
+                placeholder="50字內"
+                className="w-full outline-none p-2 text-[24px] bg-slate-100"
+                maxLength={50}
+                minLength={1}
+                required
+              />
+            </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <button
+              type="submit"
+              className="py-2 px-[100px] bg-purple-300 rounded-[10px] text-[24px] font-bold"
+            >
+              提交
+            </button>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-[30px]">
-          <span className="font-bold text-[24px]">相關年資:</span>
-          <div className="flex-grow">
-            <input
-              onChange={(e) => {
-                setSeniority(e.target.value);
-              }}
-              placeholder="0~20 年"
-              type="number"
-              min={0}
-              max={20}
-              step="0.5"
-              className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
-              required
-            />
-          </div>
-        </div>
+      </form>
 
-        <div className="flex items-center justify-center gap-[30px]">
-          <span className="font-bold text-[24px]">前公司年薪(萬):</span>
-          <div className="flex-grow">
-            <input
-              onChange={(e) => {
-                setYearwage(e.target.value);
-              }}
-              placeholder="可不透露，空白即可"
-              type="number"
-              min={30}
-              max={2000}
-              step="1"
-              className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-[30px]">
-          <span className="font-bold text-[24px]">面試滿意度:</span>
-          <div className="flex-grow">
-            <input
-              onChange={(e) => {
-                setSatisfaction(e.target.value);
-              }}
-              placeholder="1~5，你推不推薦?"
-              type="number"
-              min={1}
-              max={5}
-              step="0.1"
-              className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex items-center justify-center gap-[30px]">
-          <span className="font-bold text-[24px]">面試心得:</span>
-          <div className="flex-grow">
-            <TextareaAutosize
-              onChange={(e) => {
-                setExperience(e.target.value);
-              }}
-              placeholder="請誠實分享，誤加水造謠等，最多1萬字"
-              minLength={1}
-              maxLength={10000}
-              className="min-h-[300px] w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
-              required
-            ></TextareaAutosize>
-          </div>
-        </div>
-        <div className="flex items-center justify-center gap-[30px]">
-          <span className="font-bold text-[24px]">一句話說明此面試:</span>
-          <div className="flex-grow">
-            <input
-              onChange={(e) => {
-                setOneword(e.target.value);
-              }}
-              placeholder="50字內，非必填"
-              className="w-full outline-none p-2 text-[24px] bg-slate-100"
-              maxLength="50"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center">
-          <button
-            onClick={() => {
-              setIsOpen(true);
-            }}
-            className="py-2 px-[100px] bg-purple-300 rounded-[10px] text-[24px] font-bold"
-          >
-            提交
-          </button>
-        </div>
-      </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"

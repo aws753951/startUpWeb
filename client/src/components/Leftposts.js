@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import SmallPost from "./SmallPost";
 
 const Leftposts = ({ newestMeet, newest, hotest }) => {
@@ -12,9 +11,9 @@ const Leftposts = ({ newestMeet, newest, hotest }) => {
         <div className="flex flex-col divide-y-4 divide-slate-400/25">
           {newestMeet &&
             newestMeet.map((e, i) => (
-              <Link to={`/article/?meetArticle_id=${e._id}`} key={i}>
+              <a href={`/article/?meetArticle_id=${e._id}`} key={i}>
                 <SmallPost companyName={e.companyName} oneword={e.oneword} />
-              </Link>
+              </a>
             ))}
         </div>
       </div>
@@ -25,9 +24,9 @@ const Leftposts = ({ newestMeet, newest, hotest }) => {
         <div className="flex flex-col divide-y-4 divide-slate-400/25">
           {newest &&
             newest.map((e, i) => (
-              <Link to={`/article/?article_id=${e._id}`} key={i}>
+              <a href={`/article/?article_id=${e._id}`} key={i}>
                 <SmallPost companyName={e.companyName} oneword={e.oneword} />
-              </Link>
+              </a>
             ))}
         </div>
       </div>
@@ -38,9 +37,9 @@ const Leftposts = ({ newestMeet, newest, hotest }) => {
         <div className="flex flex-col divide-y-4 divide-slate-400/25">
           {hotest &&
             hotest.map((e, i) => (
-              <Link to={`/article/?article_id=${e._id}`} key={i}>
+              <a href={`/article/?article_id=${e._id}`} key={i}>
                 <SmallPost companyName={e.companyName} oneword={e.oneword} />
-              </Link>
+              </a>
             ))}
         </div>
       </div>

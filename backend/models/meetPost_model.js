@@ -21,7 +21,7 @@ const meetPostSchema = new Schema(
       maxlength: 10000,
       required: true,
     },
-    oneword: { type: String, maxlength: 50 },
+    oneword: { type: String, maxlength: 50, required: true },
     good: { type: [mongoose.Schema.Types.ObjectId] },
     bad: { type: [mongoose.Schema.Types.ObjectId] },
     comments: { type: Array, default: [] },

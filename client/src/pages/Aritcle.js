@@ -42,7 +42,7 @@ const Aritcle = ({ meet, setMeet }) => {
       getMeetArticle();
       setMeet(true);
     }
-  }, [article_id, meetArticle_id]);
+  }, [article_id, meetArticle_id, setMeet]);
 
   return (
     <div className="col-span-5 md:col-span-3">
