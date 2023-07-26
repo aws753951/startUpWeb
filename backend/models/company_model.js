@@ -21,7 +21,7 @@ const companySchema = new Schema(
     meetposts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Post", // "Post" 是 postSchema 的集合名稱
+        ref: "MeetPost",
       },
     ],
     wageandseniority: [

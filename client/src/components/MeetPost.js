@@ -1,8 +1,53 @@
-import { Fragment } from "react";
+import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import TextareaAutosize from "react-textarea-autosize";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const MeetPost = ({ isOpen, setIsOpen }) => {
+const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
+  const navigate = useNavigate();
+  let [jobname, setJobname] = useState("");
+  let [seniority, setSeniority] = useState("");
+  let [yearwage, setYearwage] = useState("");
+  let [satisfaction, setSatisfaction] = useState("");
+  let [experience, setExperience] = useState("");
+  let [oneword, setOneword] = useState("");
+  const handleSubmit = async () => {
+    let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+    if (!jwt_token) {
+      window.alert("要Po文，請先登入");
+      navigate("/login");
+      return;
+    }
+    try {
+      await axios.post(
+        process.env.REACT_APP_DB_URL + "/post/meetArticle/post",
+        {
+          companyId,
+          jobname,
+          seniority,
+          yearwage,
+          satisfaction,
+          experience,
+          oneword,
+        },
+        {
+          headers: {
+            Authorization: jwt_token,
+          },
+        }
+      );
+      window.alert("已經發文成功，幫你導回公司頁面");
+      navigate(0);
+    } catch (e) {
+      console.log(e);
+      if (e.response.data === "Unauthorized") {
+        window.alert("session錯誤，請你重新登入");
+        navigate("/login");
+        return;
+      }
+    }
+  };
   return (
     <>
       <div className="bg-white gap-[20px] flex flex-col  rounded-[10px] p-5 mt-2 ">
@@ -11,6 +56,11 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">應徵職務:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setJobname(e.target.value);
+              }}
+              minLength={1}
+              maxLength={50}
               placeholder="後端工程師 等"
               className="w-full outline-none p-2 text-[24px] bg-slate-100"
               required
@@ -21,6 +71,9 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">相關年資:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setSeniority(e.target.value);
+              }}
               placeholder="0~20 年"
               type="number"
               min={0}
@@ -36,9 +89,12 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">前公司年薪(萬):</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setYearwage(e.target.value);
+              }}
               placeholder="可不透露，空白即可"
               type="number"
-              min={0}
+              min={30}
               max={2000}
               step="1"
               className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
@@ -50,6 +106,9 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">面試滿意度:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setSatisfaction(e.target.value);
+              }}
               placeholder="1~5，你推不推薦?"
               type="number"
               min={1}
@@ -64,9 +123,14 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">面試心得:</span>
           <div className="flex-grow">
             <TextareaAutosize
+              onChange={(e) => {
+                setExperience(e.target.value);
+              }}
               placeholder="請誠實分享，誤加水造謠等，最多1萬字"
-              maxLength="10000"
+              minLength={1}
+              maxLength={10000}
               className="min-h-[300px] w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
+              required
             ></TextareaAutosize>
           </div>
         </div>
@@ -74,6 +138,9 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
           <span className="font-bold text-[24px]">一句話說明此面試:</span>
           <div className="flex-grow">
             <input
+              onChange={(e) => {
+                setOneword(e.target.value);
+              }}
               placeholder="50字內，非必填"
               className="w-full outline-none p-2 text-[24px] bg-slate-100"
               maxLength="50"
@@ -147,6 +214,7 @@ const MeetPost = ({ isOpen, setIsOpen }) => {
                       回頭是岸
                     </button>
                     <button
+                      onClick={handleSubmit}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-black hover:bg-red-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >

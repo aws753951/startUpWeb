@@ -5,7 +5,12 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/zh-tw";
 
-const Comments = ({ comments, setComments, article_id }) => {
+const Comments = ({ meet, comments, setComments, article_id }) => {
+  let meetArticle_id;
+  if (meet) {
+    meetArticle_id = article_id;
+  }
+
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [sorting, setSorting] = useState(false);
@@ -17,21 +22,38 @@ const Comments = ({ comments, setComments, article_id }) => {
       return;
     }
     try {
+      // 有輸入內容才會送給後端
       if (message) {
-        let response = await axios.post(
-          process.env.REACT_APP_DB_URL + "/post/article",
-          {
-            article_id,
-            message,
-          },
-
-          // headers得寫在body後面
-          {
-            headers: {
-              Authorization: jwt_token,
+        let response;
+        if (!meet) {
+          response = await axios.post(
+            process.env.REACT_APP_DB_URL + "/post/article",
+            {
+              article_id,
+              message,
             },
-          }
-        );
+            // headers得寫在body後面
+            {
+              headers: {
+                Authorization: jwt_token,
+              },
+            }
+          );
+        } else {
+          response = await axios.post(
+            process.env.REACT_APP_DB_URL + "/post/article",
+            {
+              meetArticle_id,
+              message,
+            },
+            // headers得寫在body後面
+            {
+              headers: {
+                Authorization: jwt_token,
+              },
+            }
+          );
+        }
         setMessage("");
         if (!sorting) {
           setComments([...comments, response.data]);
@@ -79,14 +101,16 @@ const Comments = ({ comments, setComments, article_id }) => {
                 <div className=" bg-slate-100 max-w-[60%] p-2 rounded-[10px] ">
                   <div className="info flex gap-3 ">
                     <div className="font-bold">{comment.username}</div>
-                    <div>{key + 1 + "F"}</div>
+                    {/* <div>{key + 1 + "F"}</div> */}
                   </div>
                   <div className="break-words ">{comment.message}</div>
                 </div>
-                <div className="relative group flex">
+                <div className="relative w-[150px] group flex">
                   <div>{moment(parseInt(comment.date)).fromNow()}</div>
-                  <p className="absolute top-[20px] right-0 text-[10px]  bg-slate-500 p-[4px] rounded-[10px] text-white hidden group-hover:block">
-                    {moment(parseInt(comment.date)).format("MM-DD")}
+                  <p className="absolute  top-[25px] text-[10px]  bg-slate-500 p-[4px] rounded-[5px] text-white hidden group-hover:block">
+                    {moment(parseInt(comment.date)).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )}
                   </p>
                 </div>
               </div>

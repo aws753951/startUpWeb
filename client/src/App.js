@@ -55,6 +55,7 @@ const App = () => {
 
   let [newest, setNewest] = useState("");
   let [hotest, setHotest] = useState("");
+  let [newestMeet, setNewestMeet] = useState("");
 
   // 取得最新文章與熱門文章
   useEffect(() => {
@@ -73,6 +74,14 @@ const App = () => {
       setHotest(response.data);
     };
     getHotest();
+
+    const getNewestMeet = async () => {
+      let response = await axios.get(
+        process.env.REACT_APP_DB_URL + "/search/newestMeet"
+      );
+      setNewestMeet(response.data);
+    };
+    getNewestMeet();
 
     // const getConceal = async () => {
     //   let response = await axios.get(
@@ -97,6 +106,7 @@ const App = () => {
     };
 
     if (companyId) {
+      console.log(companyId);
       getSpecificCompany();
     }
   }, [companyId]);
@@ -117,7 +127,12 @@ const App = () => {
           }`}
         >
           {!expandRight && (
-            <Leftbar newest={newest} hotest={hotest} expandLeft={expandLeft} />
+            <Leftbar
+              newest={newest}
+              hotest={hotest}
+              newestMeet={newestMeet}
+              expandLeft={expandLeft}
+            />
           )}
           {!expandRight && <Outlet />}
           <Rightbar expandRight={expandRight} />
@@ -153,7 +168,10 @@ const App = () => {
               />
             }
           />
-          <Route path="article" element={<Aritcle />} />
+          <Route
+            path="article"
+            element={<Aritcle meet={meet} setMeet={setMeet} />}
+          />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

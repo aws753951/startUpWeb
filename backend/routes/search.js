@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const Company = require("../models/company_model");
 const Post = require("../models/post_model");
+const MeetPost = require("../models/meetPost_model");
 
 // 這個路徑是不用登入就可以查看的
 router.get("/", async (req, res) => {
-  const { companyName, companyId, article_id } = req.query;
+  const { companyName, companyId } = req.query;
 
   try {
     // 搜尋公司名稱(contains)
@@ -16,16 +17,19 @@ router.get("/", async (req, res) => {
 
       // 已經進入公司列表，點選某間公司進行查詢
     } else if (companyId) {
-      let foundCompany = await Company.findOne({ _id: companyId }).populate({
-        path: "jobposts",
-        // "__v" 好像是內建的，省略他
-        select: "-user -updatedAt -__v",
-      });
+      let foundCompany = await Company.findOne({ _id: companyId }).populate([
+        {
+          path: "jobposts",
+          // "__v" 好像是內建的，省略他
+          select: "-user -updatedAt -__v",
+        },
+        {
+          path: "meetposts",
+          select: "-user -updatedAt -__v",
+        },
+      ]);
       res.status(200).send(foundCompany);
       // 查詢特定文章的comments  /search/?article_id=..
-    } else if (article_id) {
-      let foundArticle = await Post.findOne({ _id: article_id });
-      res.status(200).json(foundArticle.comments);
     }
   } catch (e) {
     console.log(e);
@@ -33,12 +37,33 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 查詢特定文章 /search/article/?article_id=....
+router.post("/comments", async (req, res) => {
+  const { article_id, meetArticle_id } = req.body;
+  try {
+    if (article_id) {
+      let foundArticle = await Post.findOne({ _id: article_id });
+      res.status(200).json(foundArticle.comments);
+    } else if (meetArticle_id) {
+      let foundMeetArticle = await MeetPost.findOne({ _id: meetArticle_id });
+      res.status(200).json(foundMeetArticle.comments);
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("something wrong with finding comments");
+  }
+});
+
+// 查詢特定工作文章 /search/article/?article_id=....
 router.get("/article", async (req, res) => {
   try {
-    const { article_id } = req.query;
-    let foundPost = await Post.findOne({ _id: article_id });
-    res.status(200).send(foundPost);
+    const { article_id, meetArticle_id } = req.query;
+    if (article_id) {
+      let foundPost = await Post.findOne({ _id: article_id });
+      res.status(200).send(foundPost);
+    } else if (meetArticle_id) {
+      let foundMeetPost = await MeetPost.findOne({ _id: meetArticle_id });
+      res.status(200).send(foundMeetPost);
+    }
   } catch (e) {
     console.log(e);
     res.status(500).send("somthing wrong with finding article");
@@ -48,6 +73,20 @@ router.get("/article", async (req, res) => {
 router.get("/newest", async (req, res) => {
   try {
     let sortingPost = await Post.find({}, { companyName: 1, oneword: 1 })
+      .sort({
+        createdAt: -1,
+      })
+      .limit(30);
+    res.status(200).send(sortingPost);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("somthing wrong with finding newest posts");
+  }
+});
+
+router.get("/newestMeet", async (req, res) => {
+  try {
+    let sortingPost = await MeetPost.find({}, { companyName: 1, oneword: 1 })
       .sort({
         createdAt: -1,
       })

@@ -1,13 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import SmallPost from "./SmallPost";
 
-const Leftposts = ({ newest, hotest }) => {
+const Leftposts = ({ newestMeet, newest, hotest }) => {
   return (
-    <div className="pl-2 mt-2">
-      <div className="max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
-        <div className=" bg-orange-400 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
-          最新文章
+    <div className="pl-2 mt-2 ">
+      <div className=" mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+        <div className=" bg-purple-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
+          最新面試文章
+        </div>
+        <div className="flex flex-col divide-y-4 divide-slate-400/25">
+          {newestMeet &&
+            newestMeet.map((e, i) => (
+              <Link to={`/article/?meetArticle_id=${e._id}`} key={i}>
+                <SmallPost companyName={e.companyName} oneword={e.oneword} />
+              </Link>
+            ))}
+        </div>
+      </div>
+      <div className="mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+        <div className=" bg-blue-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
+          最新工作文章
         </div>
         <div className="flex flex-col divide-y-4 divide-slate-400/25">
           {newest &&
@@ -18,9 +31,9 @@ const Leftposts = ({ newest, hotest }) => {
             ))}
         </div>
       </div>
-      <div className="mt-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
-        <div className=" bg-red-700 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
-          熱門文章
+      <div className="mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+        <div className=" bg-red-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
+          熱門工作文章
         </div>
         <div className="flex flex-col divide-y-4 divide-slate-400/25">
           {hotest &&

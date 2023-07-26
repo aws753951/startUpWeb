@@ -12,7 +12,7 @@ const CompanyInfo = ({ details, setCompanyId, meet, setMeet }) => {
 
   useEffect(() => {
     setCompanyId(companyId);
-  }, [companyId]);
+  }, [companyId, setCompanyId]);
 
   return (
     <div className="col-span-5 md:col-span-3 ">
@@ -34,12 +34,16 @@ const CompanyInfo = ({ details, setCompanyId, meet, setMeet }) => {
           !write &&
           details &&
           details.jobposts &&
-          details.jobposts.map((data, i) => <Post data={data} key={i} />)}
+          details.jobposts.map((data, i) => (
+            <Post data={data} meet={meet} key={i} />
+          ))}
         {meet &&
           !write &&
           details &&
           details.meetposts &&
-          details.meetposts.map((data, i) => <Post data={data} key={i} />)}
+          details.meetposts.map((data, i) => (
+            <Post data={data} meet={meet} key={i} />
+          ))}
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ import {
 } from "recharts";
 
 // 該data為jobposts當中每一則內容
-const Post = ({ data }) => {
+const Post = ({ data, meet }) => {
   const navigate = useNavigate();
   const user_id = JSON.parse(localStorage.getItem("session_user_id"));
   let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
@@ -32,47 +32,62 @@ const Post = ({ data }) => {
   let [commentOpen, setCommentOpen] = useState(false);
   let [comments, setComments] = useState("");
 
-  const data_ = [
-    {
-      subject: "滿意度",
-      A: data.satisfaction,
-      fullMark: 5,
-    },
-    {
-      subject: "企業氛圍",
-      A: data.environ,
-      fullMark: 5,
-    },
+  let data_;
+  if (!meet) {
+    data_ = [
+      {
+        subject: "滿意度",
+        A: data.satisfaction,
+        fullMark: 5,
+      },
+      {
+        subject: "企業氛圍",
+        A: data.environ,
+        fullMark: 5,
+      },
 
-    {
-      subject: "輕鬆程度",
-      A: data.easy,
-      fullMark: 5,
-    },
-    {
-      subject: "Loading",
-      A: data.loading,
-      fullMark: 5,
-    },
-    {
-      subject: "加班程度",
-      A: data.addworkhour / 4,
-      fullMark: 5,
-    },
-  ];
+      {
+        subject: "輕鬆程度",
+        A: data.easy,
+        fullMark: 5,
+      },
+      {
+        subject: "Loading",
+        A: data.loading,
+        fullMark: 5,
+      },
+      {
+        subject: "加班程度",
+        A: data.addworkhour / 4,
+        fullMark: 5,
+      },
+    ];
+  }
 
   const handleGetMessage = async () => {
     setCommentOpen(!commentOpen);
 
     // 跟 "" 搭配是因為 !"" 會啟動，但 ![] 不會啟動 => 讓真的沒留言的文章僅跟DB互動一次，避免重複互動
-    if (!comments) {
-      let result = await axios.get(
-        process.env.REACT_APP_DB_URL + `/search/?article_id=${data._id}`
-      );
-      setComments(result.data);
 
-      // 待刪除
-      console.log(result.data);
+    if (!comments) {
+      try {
+        let result;
+        if (!meet) {
+          result = await axios.post(
+            process.env.REACT_APP_DB_URL + "/search/comments",
+            { article_id: data._id }
+          );
+        } else {
+          result = await axios.post(
+            process.env.REACT_APP_DB_URL + "/search/comments",
+            { meetArticle_id: data._id }
+          );
+        }
+
+        setComments(result.data);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -94,17 +109,31 @@ const Post = ({ data }) => {
         });
       }
       setGood(!good);
-      await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/article/agree",
-        {
-          article_id: data._id,
-        },
-        {
-          headers: {
-            Authorization: jwt_token,
+      if (!meet) {
+        await axios.post(
+          process.env.REACT_APP_DB_URL + "/post/article/agree",
+          {
+            article_id: data._id,
           },
-        }
-      );
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+      } else {
+        await axios.post(
+          process.env.REACT_APP_DB_URL + "/post/article/agree",
+          {
+            meetArticle_id: data._id,
+          },
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+      }
     } catch (e) {
       console.log(e);
       window.alert("要按讚請先登入");
@@ -132,17 +161,31 @@ const Post = ({ data }) => {
       }
       // 調整現在按下的狀況
       setBad(!bad);
-      await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/article/disagree",
-        {
-          article_id: data._id,
-        },
-        {
-          headers: {
-            Authorization: jwt_token,
+      if (!meet) {
+        await axios.post(
+          process.env.REACT_APP_DB_URL + "/post/article/disagree",
+          {
+            article_id: data._id,
           },
-        }
-      );
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+      } else {
+        await axios.post(
+          process.env.REACT_APP_DB_URL + "/post/article/disagree",
+          {
+            meetArticle_id: data._id,
+          },
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+      }
     } catch (e) {
       console.log(e);
       window.alert("要倒讚請先登入");
@@ -290,6 +333,7 @@ const Post = ({ data }) => {
           comments={comments}
           setComments={setComments}
           article_id={data._id}
+          meet={meet}
         />
       )}
     </div>
