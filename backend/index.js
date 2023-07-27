@@ -35,8 +35,34 @@ app.use(
 
 app.use("/search", searchRoute);
 
+app.set("trust proxy", true); // 设置 trust proxy，信任代理服务器
+
+app.use((req, res, next) => {
+  function getClientIp(req) {
+    if (req.headers["x-forwarded-for"]) {
+      // try to get from x-forwared-for if it set (behind reverse proxy)
+      return req.headers["x-forwarded-for"].split(",")[0];
+    } else if (req.connection && req.connection.remoteAddress) {
+      // no proxy, try getting from connection.remoteAddress
+      return req.connection.remoteAddress;
+    } else if (req.socket) {
+      // try to get it from req.socket
+      return req.socket.remoteAddress;
+    } else if (req.connection && req.connection.socket) {
+      // try to get it form the connection.socket
+      return req.connection.socket.remoteAddress;
+    } else {
+      // if non above, fallback.
+      return req.ip;
+    }
+  }
+
+  req.userIP = getClientIp(req);
+  next();
+});
+
 app.get("/", (req, res) => {
-  res.status(200).send("api test");
+  res.send(req.userIP);
 });
 
 app.listen("8080", () => console.log(`8080 running`));
