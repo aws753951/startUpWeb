@@ -22,7 +22,6 @@ const Aritcle = ({ meet, setMeet }) => {
           `/search/article/?article_id=${article_id}`
       );
       setArticle(response.data);
-      console.log(response.data);
     };
     const getMeetArticle = async () => {
       // /search/article/?meetArticle_id=....
@@ -31,7 +30,6 @@ const Aritcle = ({ meet, setMeet }) => {
           `/search/article/?meetArticle_id=${meetArticle_id}`
       );
       setArticle(response.data);
-      console.log(response.data);
     };
 
     // 只會是一種搜尋，不可能同時搜面試經驗又搜工作經驗

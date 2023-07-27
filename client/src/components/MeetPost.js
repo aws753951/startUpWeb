@@ -58,8 +58,8 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
       >
         <div className="bg-white gap-[20px] flex flex-col  rounded-[10px] p-5 mt-2 ">
           <div className="text-[30px] font-bold text-center">面試評論</div>
-          <div className="flex items-center justify-between gap-[30px]">
-            <span className="font-bold text-[24px]">應徵職務:</span>
+          <div className="flex items-center justify-between gap-[10px]">
+            <span className="font-bold ">應徵職務:</span>
             <div className="flex-grow">
               <input
                 onChange={(e) => {
@@ -68,13 +68,13 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                 minLength={1}
                 maxLength={50}
                 placeholder="後端工程師 等"
-                className="w-full outline-none p-2 text-[24px] bg-slate-100"
+                className="w-full outline-none p-2  bg-slate-100"
                 required
               />
             </div>
           </div>
-          <div className="flex items-center justify-center gap-[30px]">
-            <span className="font-bold text-[24px]">相關年資:</span>
+          <div className="flex items-center justify-center gap-[10px]">
+            <span className="font-bold ">相關年資:</span>
             <div className="flex-grow">
               <input
                 onChange={(e) => {
@@ -85,13 +85,13 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                 min={0}
                 max={20}
                 step="0.5"
-                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+                className="appearance-none w-full outline-none p-2  bg-slate-100"
                 required
               />
             </div>
           </div>
-          <div className="flex items-center justify-center gap-[30px]">
-            <span className="font-bold text-[24px]">前公司年薪(萬):</span>
+          <div className="flex items-center justify-center gap-[10px]">
+            <span className="font-bold ">前公司年薪(萬):</span>
             <div className="flex-grow">
               <input
                 onChange={(e) => {
@@ -102,12 +102,12 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                 min={30}
                 max={2000}
                 step="1"
-                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+                className="appearance-none w-full outline-none p-2  bg-slate-100"
               />
             </div>
           </div>
-          <div className="flex items-center justify-center gap-[30px]">
-            <span className="font-bold text-[24px]">面試滿意度:</span>
+          <div className="flex items-center justify-center gap-[10px]">
+            <span className="font-bold ">面試滿意度:</span>
             <div className="flex-grow">
               <input
                 onChange={(e) => {
@@ -118,13 +118,13 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                 min={1}
                 max={5}
                 step="0.1"
-                className="appearance-none w-full outline-none p-2 text-[24px] bg-slate-100"
+                className="appearance-none w-full outline-none p-2  bg-slate-100"
                 required
               />
             </div>
           </div>
-          <div className="flex items-center justify-center gap-[30px]">
-            <span className="font-bold text-[24px]">面試心得:</span>
+          <div className="flex items-center justify-center gap-[10px]">
+            <span className="font-bold ">面試心得:</span>
             <div className="flex-grow">
               <TextareaAutosize
                 onChange={(e) => {
@@ -133,20 +133,20 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                 placeholder="請誠實分享，誤加水造謠等，最多1萬字"
                 minLength={1}
                 maxLength={10000}
-                className="min-h-[300px] w-full text-[24px] outline-none bg-slate-100 overflow-hidden resize-none p-2 "
+                className="min-h-[300px] w-full  outline-none bg-slate-100 overflow-hidden resize-none p-2 "
                 required
               ></TextareaAutosize>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-[30px]">
-            <span className="font-bold text-[24px]">一句話說明此面試:</span>
+          <div className="flex items-center justify-center gap-[10px]">
+            <span className="font-bold ">一句話說明此面試:</span>
             <div className="flex-grow">
               <input
                 onChange={(e) => {
                   setOneword(e.target.value);
                 }}
                 placeholder="50字內"
-                className="w-full outline-none p-2 text-[24px] bg-slate-100"
+                className="w-full outline-none p-2  bg-slate-100"
                 maxLength={50}
                 minLength={1}
                 required

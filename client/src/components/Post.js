@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import Comments from "./Comments";
@@ -31,6 +31,17 @@ const Post = ({ data, meet }) => {
 
   let [commentOpen, setCommentOpen] = useState(false);
   let [comments, setComments] = useState("");
+
+  // 避免別人使用Link時，狀態被transfer
+  useEffect(() => {
+    setCommentOpen(false);
+    setComments("");
+    setOpenDetail(false);
+    setBadCount(data.bad.length);
+    setGoodCount(data.good.length);
+    setBad(data.bad.includes(user_id));
+    setGood(data.good.includes(user_id));
+  }, [data]);
 
   let data_;
   if (!meet) {
