@@ -102,11 +102,9 @@ const App = () => {
         process.env.REACT_APP_DB_URL + `/search/?companyId=${companyId}`
       );
       setDetails(companyDetails.data);
-      console.log(companyDetails.data);
     };
 
     if (companyId) {
-      console.log(companyId);
       getSpecificCompany();
     }
   }, [companyId]);

@@ -8,7 +8,6 @@ const CompanyPost = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [companyUrl, setCompanyUrl] = useState("");
-  // po文前先檢查，避免填完才發現不能po文
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -24,7 +23,11 @@ const CompanyPost = () => {
       await axios.post(
         process.env.REACT_APP_DB_URL + "/post/company",
         {
-          name: companyName,
+          // 避免有人從postman惡搞
+          name:
+            companyName.split("LOGO").length == 2
+              ? companyName.split("LOGO")[1].trim()
+              : companyName.trim(),
           url: companyUrl,
         },
         {
@@ -42,6 +45,8 @@ const CompanyPost = () => {
         navigate("/login");
         return;
       }
+      setIsSubmitted(false);
+      window.alert(e.response.data);
     }
   };
 
@@ -53,6 +58,7 @@ const CompanyPost = () => {
       </span>
 
       <img
+        alt="範例"
         className="border-4 border-red-600 p-1"
         src={require("../assets/companyname.png")}
       />
@@ -69,7 +75,11 @@ const CompanyPost = () => {
               minLength={1}
               maxLength={100}
               onChange={(e) => {
-                setCompanyName(e.target.value);
+                setCompanyName(
+                  e.target.value.split("LOGO").length == 2
+                    ? e.target.value.split("LOGO")[1].trim()
+                    : e.target.value.trim()
+                );
               }}
               placeholder="填寫104上公司的全名"
               className="w-full outline-none p-2  bg-slate-100"
@@ -177,7 +187,7 @@ const CompanyPost = () => {
                       disabled={isSubmitted}
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-black hover:bg-red-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
-                      無情提交
+                      {isSubmitted ? "提交中" : "無情提交"}
                     </button>
                   </div>
                 </Dialog.Panel>

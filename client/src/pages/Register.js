@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 
 const Register = () => {
   const navigate = useNavigate();
-  // 待改
+  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const validateEmail = useCallback(() => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      setError("請輸入正確的email格式");
+    } else {
+      setError("");
+    }
+  }, [email]);
+
+  const valiidatePassword = useCallback(() => {
+    if (password.length < 6 || password.length > 100) {
+      setPasswordError("請密碼長度介於6~100字");
+    } else {
+      setPasswordError("");
+    }
+  }, [password]);
+
+  useEffect(() => {
+    validateEmail();
+    valiidatePassword();
+  }, [email, validateEmail, valiidatePassword]);
 
   const googleAuth = () => {
     window.open(
@@ -18,17 +42,29 @@ const Register = () => {
   };
   const normalRegister = async (e) => {
     try {
-      e.preventDefault();
-      await axios.post(`${process.env.REACT_APP_DB_URL}/auth/register`, {
-        email,
-        password,
-      });
-      window.alert("請於10分鐘內至信箱認證");
-      navigate("/login");
+      if (!error && !passwordError) {
+        setIsSubmitted(true);
+        e.preventDefault();
+        await axios.post(`${process.env.REACT_APP_DB_URL}/auth/register`, {
+          email,
+          password,
+        });
+        window.alert("請於10分鐘內至信箱認證");
+        navigate("/login");
+        // 這幾個應該用不到，前面html的格式就幫忙擋了
+      } else if (error) {
+        window.alert(error);
+        setIsSubmitted(false);
+        // 這幾個應該用不到，前面html的格式就幫忙擋了
+      } else if (passwordError) {
+        window.alert(passwordError);
+        setIsSubmitted(false);
+      }
     } catch (e) {
       // 若失敗則會維持在login的畫面
       window.alert("信箱已被註冊，請用google或者換個email");
       console.log(e);
+      setIsSubmitted(false);
     }
   };
 
@@ -56,21 +92,32 @@ const Register = () => {
               }}
               type="email"
               placeholder="Email"
-              className="border-b-4 p-1 text-[24px] outline-none"
+              className={`border-b-4 p-1 text-[24px] outline-none ${
+                error ? "border-gray-300" : "border-green-500"
+              }`}
+              min={6}
+              max={50}
+              required
             />
+
             <input
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
               type="password"
               placeholder="Password"
-              className="border-b-4 p-1 text-[24px] outline-none"
+              className={`border-b-4 p-1 text-[24px] outline-none ${
+                passwordError ? "border-gray-300" : "border-green-500"
+              }`}
+              minLength={6}
+              maxLength={100}
+              required
             />
             <button
-              onClick={normalRegister}
+              disabled={isSubmitted}
               className="w-[60%] p-[10px] text-center text-[24px] bg-purple-200  font-bold cursor-pointer rounded-[10px] "
             >
-              Register
+              {isSubmitted ? "提交中" : "註冊"}
             </button>
           </form>
         </div>

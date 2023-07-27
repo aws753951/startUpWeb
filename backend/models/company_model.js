@@ -5,12 +5,16 @@ const companySchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
       minlength: 1,
-      maxlength: 50,
+      maxlength: 100,
+      trim: true,
+      required: true,
     },
     url: {
       type: String,
+      minlength: 1,
+      maxlength: 200,
+      required: true,
     },
     jobposts: [
       {

@@ -24,6 +24,7 @@ const Search = () => {
     getCompany();
   }, [companyName]);
 
+  // 提交前先檢查
   const handlePost = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {

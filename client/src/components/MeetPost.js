@@ -12,6 +12,9 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
   let [satisfaction, setSatisfaction] = useState("");
   let [experience, setExperience] = useState("");
   let [oneword, setOneword] = useState("");
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleSubmit = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
@@ -20,9 +23,12 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
       return;
     }
     try {
-      await axios.post(
-        process.env.REACT_APP_DB_URL + "/post/meetArticle/post",
-        {
+      setIsSubmitted(true);
+
+      // 特別處理真的有不填相關資料
+      let object;
+      if (yearwage) {
+        object = {
           companyId,
           jobname,
           seniority,
@@ -30,7 +36,20 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
           satisfaction,
           experience,
           oneword,
-        },
+        };
+      } else {
+        object = {
+          companyId,
+          jobname,
+          seniority,
+          satisfaction,
+          experience,
+          oneword,
+        };
+      }
+      await axios.post(
+        process.env.REACT_APP_DB_URL + "/post/meetArticle/post",
+        object,
         {
           headers: {
             Authorization: jwt_token,
@@ -46,6 +65,8 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
         navigate("/login");
         return;
       }
+      setIsSubmitted(false);
+      window.alert(e.response.data);
     }
   };
   return (
@@ -221,9 +242,10 @@ const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
                     <button
                       onClick={handleSubmit}
                       type="button"
+                      disabled={isSubmitted}
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-black hover:bg-red-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
-                      無情提交
+                      {isSubmitted ? "提交中" : "無情提交"}
                     </button>
                   </div>
                 </Dialog.Panel>

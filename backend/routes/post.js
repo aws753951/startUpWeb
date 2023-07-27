@@ -3,40 +3,53 @@ const Post = require("../models/post_model");
 const MeetPost = require("../models/meetPost_model");
 const Company = require("../models/company_model");
 const User = require("../models/user_model");
+const jobPostValidation = require("../validation").jobPostValidation;
+const meetPostValidation = require("../validation").meetPostValidation;
+const companyPostValidation = require("../validation").companyPostValidation;
 
 router.get("/", (req, res) => {
   let { email, user_id } = req.user;
-  res.send({ email, user_id });
+  return res.send({ email, user_id });
 });
 
 // 創建新的公司資訊
 router.post("/company", async (req, res) => {
   try {
+    let { error } = companyPostValidation(req.body);
+    if (error) {
+      return res.status(403).send(error.details[0].message);
+    }
+
     const { name, url } = req.body;
     let foundCompany = await Company.findOne({ name });
     if (foundCompany) {
-      res.status(403).send("company exists");
+      return res.status(403).send("company exists");
     }
     let newCompany = new Company({ name, url });
     await newCompany.save();
-    res.status(200).send("company successfully saved");
+    return res.status(200).send("company successfully saved");
   } catch (e) {
     console.log(e);
-    res.status(403).send("company not saved");
+    return res.status(403).send("company not saved");
   }
 });
 
 router.post("/article/post", async (req, res) => {
   try {
-    // 必定放joi
+    // joi
+    let { error } = jobPostValidation(req.body);
+    if (error) {
+      return res.status(403).send(error.details[0].message);
+    }
+
     let foundCompany = await Company.findOne({ _id: req.body.companyId });
     if (!foundCompany) {
-      res.status(403).send("company not found");
+      return res.status(403).send("company not found");
     }
     const { email } = req.user;
     let foundUser = await User.findOne({ email });
     if (!foundUser) {
-      res.status(403).send("user not found");
+      return res.status(403).send("user not found");
     }
     const { id, username } = foundUser;
     let object = {
@@ -49,6 +62,7 @@ router.post("/article/post", async (req, res) => {
     const newPost = new Post(object);
     let savedPost = await newPost.save();
 
+    // 替公司schema新增公司發文/薪水/評估
     await Company.findOneAndUpdate(
       { _id: req.body.companyId },
       {
@@ -75,27 +89,31 @@ router.post("/article/post", async (req, res) => {
       }
     );
 
-    res.status(200).send("article successfully saved");
+    return res.status(200).send("article successfully saved");
   } catch (e) {
     console.log(e);
-    res.status(403).send("article not saved");
+    return res.status(403).send("article not saved");
   }
 });
 
 router.post("/meetArticle/post", async (req, res) => {
   try {
-    // 必定放joi
+    // joi
+    let { error } = meetPostValidation(req.body);
+    if (error) {
+      return res.status(403).send(error.details[0].message);
+    }
+
     let foundCompany = await Company.findOne({ _id: req.body.companyId });
     if (!foundCompany) {
-      res.status(403).send("company not found");
+      return res.status(403).send("company not found");
     }
     const { email } = req.user;
     let foundUser = await User.findOne({ email });
     if (!foundUser) {
-      res.status(403).send("user not found");
+      return res.status(403).send("user not found");
     }
-    // 待刪除.......................................................
-    console.log(req.body);
+
     const { id, username } = foundUser;
     let object = {
       ...req.body,
@@ -116,10 +134,10 @@ router.post("/meetArticle/post", async (req, res) => {
       }
     );
 
-    res.status(200).send("article successfully saved");
+    return res.status(200).send("article successfully saved");
   } catch (e) {
     console.log(e);
-    res.status(403).send("article not saved");
+    return res.status(403).send("article not saved");
   }
 });
 
@@ -145,9 +163,9 @@ router.post("/article", async (req, res) => {
         { new: true }
       );
       if (!result) {
-        res.status(403).send("cant find or update article");
+        return res.status(403).send("cant find or update article");
       }
-      res
+      return res
         .status(200)
         .send({ user_id, username, message, date: date.toString() });
     } else if (meetArticle_id) {
@@ -161,15 +179,15 @@ router.post("/article", async (req, res) => {
         { new: true }
       );
       if (!result) {
-        res.status(403).send("cant find or update article");
+        return res.status(403).send("cant find or update article");
       }
-      res
+      return res
         .status(200)
         .send({ user_id, username, message, date: date.toString() });
     }
   } catch (e) {
     console.log(e);
-    res.status(403).send("message not saved");
+    return res.status(403).send("message not saved");
   }
 });
 
@@ -201,7 +219,7 @@ router.post("/article/agree", async (req, res) => {
         );
       }
 
-      res.status(200).send("handle agree successfully");
+      return res.status(200).send("handle agree successfully");
     } else if (meetArticle_id) {
       const AgreeMeetPost = await MeetPost.findOne({
         _id: meetArticle_id,
@@ -228,11 +246,11 @@ router.post("/article/agree", async (req, res) => {
         );
       }
 
-      res.status(200).send("handle agree successfully");
+      return res.status(200).send("handle agree successfully");
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send("something wrong with sending agree");
+    return res.status(500).send("something wrong with sending agree");
   }
 });
 
@@ -265,7 +283,7 @@ router.post("/article/disagree", async (req, res) => {
         );
       }
 
-      res.status(200).send("handle disagree successfully");
+      return res.status(200).send("handle disagree successfully");
     } else if (meetArticle_id) {
       const AgreeMeetPost = await MeetPost.findOne({
         _id: meetArticle_id,
@@ -293,11 +311,11 @@ router.post("/article/disagree", async (req, res) => {
         );
       }
 
-      res.status(200).send("handle disagree successfully");
+      return res.status(200).send("handle disagree successfully");
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send("something wrong with sending disagree");
+    return res.status(500).send("something wrong with sending disagree");
   }
 });
 

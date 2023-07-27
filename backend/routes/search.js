@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
       let foundCompany = await Company.find({
         name: { $regex: `.*${companyName}.*`, $options: "i" },
       });
-      res.status(200).send(foundCompany);
+      return res.status(200).send(foundCompany);
 
       // 已經進入公司列表，點選某間公司進行查詢
     } else if (companyId) {
@@ -28,12 +28,12 @@ router.get("/", async (req, res) => {
           select: "-user -updatedAt -__v",
         },
       ]);
-      res.status(200).send(foundCompany);
+      return res.status(200).send(foundCompany);
       // 查詢特定文章的comments  /search/?article_id=..
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send("something wrong with finding company");
+    return res.status(500).send("something wrong with finding company");
   }
 });
 
@@ -42,14 +42,14 @@ router.post("/comments", async (req, res) => {
   try {
     if (article_id) {
       let foundArticle = await Post.findOne({ _id: article_id });
-      res.status(200).json(foundArticle.comments);
+      return res.status(200).json(foundArticle.comments);
     } else if (meetArticle_id) {
       let foundMeetArticle = await MeetPost.findOne({ _id: meetArticle_id });
-      res.status(200).json(foundMeetArticle.comments);
+      return res.status(200).json(foundMeetArticle.comments);
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send("something wrong with finding comments");
+    return res.status(500).send("something wrong with finding comments");
   }
 });
 
@@ -59,14 +59,14 @@ router.get("/article", async (req, res) => {
     const { article_id, meetArticle_id } = req.query;
     if (article_id) {
       let foundPost = await Post.findOne({ _id: article_id });
-      res.status(200).send(foundPost);
+      return res.status(200).send(foundPost);
     } else if (meetArticle_id) {
       let foundMeetPost = await MeetPost.findOne({ _id: meetArticle_id });
-      res.status(200).send(foundMeetPost);
+      return res.status(200).send(foundMeetPost);
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send("somthing wrong with finding article");
+    return res.status(500).send("somthing wrong with finding article");
   }
 });
 
@@ -77,10 +77,10 @@ router.get("/newest", async (req, res) => {
         createdAt: -1,
       })
       .limit(30);
-    res.status(200).send(sortingPost);
+    return res.status(200).send(sortingPost);
   } catch (e) {
     console.log(e);
-    res.status(500).send("somthing wrong with finding newest posts");
+    return res.status(500).send("somthing wrong with finding newest posts");
   }
 });
 
@@ -91,10 +91,10 @@ router.get("/newestMeet", async (req, res) => {
         createdAt: -1,
       })
       .limit(30);
-    res.status(200).send(sortingPost);
+    return res.status(200).send(sortingPost);
   } catch (e) {
     console.log(e);
-    res.status(500).send("somthing wrong with finding newest posts");
+    return res.status(500).send("somthing wrong with finding newest posts");
   }
 });
 
@@ -114,10 +114,10 @@ router.get("/hotest", async (req, res) => {
         },
       },
     ]).limit(30);
-    res.status(200).send(sortingPost);
+    return res.status(200).send(sortingPost);
   } catch (e) {
     console.log(e);
-    res.status(500).send("somthing wrong with finding hotest posts");
+    return res.status(500).send("somthing wrong with finding hotest posts");
   }
 });
 

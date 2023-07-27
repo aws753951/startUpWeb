@@ -802,6 +802,10 @@ input[type="number"]::-webkit-outer-spin-button,
   max-height: 500px;
 }
 
+.max-h-\[300px\] {
+  max-height: 300px;
+}
+
 .min-h-\[300px\] {
   min-height: 300px;
 }
@@ -1105,13 +1109,23 @@ input[type="number"]::-webkit-outer-spin-button,
   border-color: rgb(79 70 229 / var(--tw-border-opacity));
 }
 
+.border-red-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(220 38 38 / var(--tw-border-opacity));
+}
+
 .border-transparent {
   border-color: transparent;
 }
 
-.border-red-600 {
+.border-green-500 {
   --tw-border-opacity: 1;
-  border-color: rgb(220 38 38 / var(--tw-border-opacity));
+  border-color: rgb(34 197 94 / var(--tw-border-opacity));
+}
+
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
 .bg-black {
@@ -1137,6 +1151,11 @@ input[type="number"]::-webkit-outer-spin-button,
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 .bg-gray-400 {
@@ -1209,11 +1228,6 @@ input[type="number"]::-webkit-outer-spin-button,
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-gray-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
 }
@@ -1260,10 +1274,6 @@ input[type="number"]::-webkit-outer-spin-button,
 
 .p-\[50px\] {
   padding: 50px;
-}
-
-.p-10 {
-  padding: 2.5rem;
 }
 
 .px-4 {
@@ -1345,6 +1355,10 @@ input[type="number"]::-webkit-outer-spin-button,
   font-size: 14px;
 }
 
+.text-\[16px\] {
+  font-size: 16px;
+}
+
 .text-\[20px\] {
   font-size: 20px;
 }
@@ -1377,10 +1391,6 @@ input[type="number"]::-webkit-outer-spin-button,
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
-}
-
-.text-\[16px\] {
-  font-size: 16px;
 }
 
 .font-bold {
@@ -1428,6 +1438,11 @@ input[type="number"]::-webkit-outer-spin-button,
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .opacity-0 {
@@ -1532,14 +1547,14 @@ input[type="number"]::-webkit-outer-spin-button,
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
-.hover\:text-white:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
 .hover\:text-blue-700:hover {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
+}
+
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .focus\:outline-none:focus {

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Leftposts = ({ newestMeet, newest, hotest }) => {
   return (
     <div className="pl-2 mt-2 ">
-      <div className=" mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+      <div className=" mb-2 max-h-[300px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
         <div className=" bg-purple-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
           最新面試文章
         </div>
@@ -18,7 +18,7 @@ const Leftposts = ({ newestMeet, newest, hotest }) => {
             ))}
         </div>
       </div>
-      <div className="mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+      <div className="mb-2 max-h-[300px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
         <div className=" bg-blue-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
           最新工作文章
         </div>
@@ -31,7 +31,7 @@ const Leftposts = ({ newestMeet, newest, hotest }) => {
             ))}
         </div>
       </div>
-      <div className="mb-2 max-h-[500px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
+      <div className="mb-2 max-h-[300px] shadow-lg rounded-[10px]  bg-gray-50 overflow-scroll no-scrollbar relative">
         <div className=" bg-red-300 font-bold text-[24px] text-center sticky z-10 top-0 border-b-4">
           熱門工作文章
         </div>

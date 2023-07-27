@@ -20,6 +20,8 @@ const JobPost = ({ companyId, isOpen, setIsOpen }) => {
   let [satisfaction, setSatisfaction] = useState("");
   let [experience, setExperience] = useState("");
   let [oneword, setOneword] = useState("");
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const handleSubmit = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
@@ -28,6 +30,7 @@ const JobPost = ({ companyId, isOpen, setIsOpen }) => {
       return;
     }
     try {
+      setIsSubmitted(true);
       await axios.post(
         process.env.REACT_APP_DB_URL + "/post/article/post",
         {
@@ -62,6 +65,8 @@ const JobPost = ({ companyId, isOpen, setIsOpen }) => {
         navigate("/login");
         return;
       }
+      window.alert(e.response.data);
+      setIsSubmitted(false);
     }
   };
 
@@ -375,9 +380,10 @@ const JobPost = ({ companyId, isOpen, setIsOpen }) => {
                     <button
                       onClick={handleSubmit}
                       type="button"
+                      disabled={isSubmitted}
                       className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-black hover:bg-red-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
-                      無情提交
+                      {isSubmitted ? "提交中" : "無情提交"}
                     </button>
                   </div>
                 </Dialog.Panel>

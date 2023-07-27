@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user_model");
 const nodemailer = require("nodemailer");
+const authValidation = require("../validation").authValidation;
 
 router.get("/google", passport.authenticate("google"));
 
@@ -27,7 +28,7 @@ router.get(
         { email, user_id: processUser._id },
         process.env.PASSPORT_SECRET,
         {
-          expiresIn: 60 * 60 * 24,
+          expiresIn: 60 * 60 * 72,
         }
       );
       res.redirect(`${process.env.CLIENT_URL}auth/setjwt/?token=JWT ${token}`);
@@ -40,7 +41,10 @@ router.get(
 
 router.post("/register", async (req, res) => {
   try {
-    // 記得補joi
+    let { error } = authValidation(req.body);
+    if (error) {
+      return res.status(403).send(error.details[0].message);
+    }
     const { email, password } = req.body;
     const foundUser = await User.findOne({ email });
     if (foundUser) {
@@ -65,9 +69,9 @@ router.post("/register", async (req, res) => {
     const options = {
       from: "startupwebsite@gmail.com",
       to: email,
-      subject: "薪水網會員註冊認證",
+      subject: "也援薪自助註冊會員",
       html: `<h2>打工人，打工魂，打工都是人上人，我們要悄悄地打工，然後驚艷所有人</h2>\
-       <p>打工人的傲氣從這一步開啟，請於註冊10分鐘內點擊註冊認證的<a href="${process.env.CLIENT_URL}auth/confirm/?token=${token}" title="${process.env.CLIENT_URL}auth/confirm/?token=${token}">網址</a> 薪資透明是打工人的驕傲，在未推倒資本主義的高牆前，我會義無反顧維護打工人最後的尊嚴</p>`,
+       <p>請於註冊10分鐘內點擊註冊認證的<a href="${process.env.CLIENT_URL}auth/confirm/?token=${token}" title="${process.env.CLIENT_URL}auth/confirm/?token=${token}">網址</a></p>`,
     };
     transporter.sendMail(options, function (error, info) {
       if (error) {
@@ -76,7 +80,7 @@ router.post("/register", async (req, res) => {
         console.log("訊息發送: " + info.response);
       }
     });
-    res.status(200).send("email sent");
+    return res.status(200).send("email sent");
   } catch (e) {
     console.log(e);
     return res.status(500).send("trouble with building token or sending email");
@@ -109,6 +113,10 @@ router.get("/confirm/:token", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
+    let { error } = authValidation(req.body);
+    if (error) {
+      return res.status(403).send(error.details[0].message);
+    }
     const { email, password } = req.body;
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
@@ -120,7 +128,7 @@ router.post("/login", async (req, res) => {
           { email, user_id: foundUser._id },
           process.env.PASSPORT_SECRET,
           {
-            expiresIn: 60 * 60 * 24,
+            expiresIn: 60 * 60 * 72,
           }
         );
         return res.status(200).send(`JWT ${token}`);

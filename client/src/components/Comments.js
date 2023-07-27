@@ -14,6 +14,9 @@ const Comments = ({ meet, comments, setComments, article_id }) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [sorting, setSorting] = useState(false);
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
@@ -23,7 +26,8 @@ const Comments = ({ meet, comments, setComments, article_id }) => {
     }
     try {
       // 有輸入內容才會送給後端
-      if (message) {
+      if (message && !isSubmitted) {
+        setIsSubmitted(true);
         let response;
         if (!meet) {
           response = await axios.post(
@@ -60,6 +64,7 @@ const Comments = ({ meet, comments, setComments, article_id }) => {
         } else {
           setComments([response.data, ...comments]);
         }
+        setIsSubmitted(false);
       }
     } catch (e) {
       console.log(e);
@@ -68,6 +73,8 @@ const Comments = ({ meet, comments, setComments, article_id }) => {
         navigate("/login");
         return;
       }
+      window.alert(e.response.data);
+      setIsSubmitted(false);
     }
   };
 

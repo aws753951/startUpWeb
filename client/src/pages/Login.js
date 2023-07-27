@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import GoogleButton from "react-google-button";
 
 const Login = () => {
   const navigate = useNavigate();
-  // 待改
+  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const validateEmail = useCallback(() => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      setError("請輸入正確的email格式");
+    } else {
+      setError("");
+    }
+  }, [email]);
+
+  const valiidatePassword = useCallback(() => {
+    if (password.length < 6 || password.length > 100) {
+      setPasswordError("請密碼長度介於6~100字");
+    } else {
+      setPasswordError("");
+    }
+  }, [password]);
+
+  useEffect(() => {
+    validateEmail();
+    valiidatePassword();
+  }, [email, validateEmail, valiidatePassword]);
 
   const googleAuth = () => {
     window.open(
@@ -18,20 +42,33 @@ const Login = () => {
 
   const normalLogin = async (e) => {
     try {
-      e.preventDefault();
-      let response = await axios.post(
-        `${process.env.REACT_APP_DB_URL}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
-      localStorage.setItem("jwt_token", JSON.stringify(response.data));
-      navigate("/");
-      window.location.reload();
+      if (!error && !passwordError) {
+        setIsSubmitted(true);
+        e.preventDefault();
+        let response = await axios.post(
+          `${process.env.REACT_APP_DB_URL}/auth/login`,
+          {
+            email,
+            password,
+          }
+        );
+        localStorage.setItem("jwt_token", JSON.stringify(response.data));
+        navigate("/");
+        window.location.reload();
+        // 這幾個應該用不到，前面html的格式就幫忙擋了
+      } else if (error) {
+        window.alert(error);
+        setIsSubmitted(false);
+        // 這幾個應該用不到，前面html的格式就幫忙擋了
+      } else if (passwordError) {
+        window.alert(passwordError);
+        setIsSubmitted(false);
+      }
     } catch (e) {
+      console.log(e);
       // 若失敗則會維持在login的畫面
       window.alert("帳號或密碼錯誤");
+      setIsSubmitted(false);
     }
   };
 
@@ -53,26 +90,36 @@ const Login = () => {
           <GoogleButton label="Google 登入" onClick={googleAuth} />
           <form onSubmit={normalLogin} className="flex flex-col gap-[30px]">
             <input
-              type="text"
+              type="email"
               placeholder="Email"
-              className=" border-b-4 p-1 text-[24px] outline-none"
+              className={`border-b-4 p-1 text-[24px] outline-none ${
+                error ? "border-gray-300" : "border-green-500"
+              }`}
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
+              minLength={6}
+              maxLength={50}
+              required
             />
             <input
               type="password"
               placeholder="Password"
-              className="border-b-4 p-1  text-[24px] outline-none"
+              className={`border-b-4 p-1 text-[24px] outline-none ${
+                passwordError ? "border-gray-300" : "border-green-500"
+              }`}
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              minLength={6}
+              maxLength={100}
+              required
             />
             <button
-              onClick={normalLogin}
+              disabled={isSubmitted}
               className="w-[60%] p-[10px] text-[24px] text-center bg-blue-200 font-bold cursor-pointer rounded-[10px] "
             >
-              login
+              {isSubmitted ? "提交中" : "登入"}
             </button>
           </form>
         </div>
