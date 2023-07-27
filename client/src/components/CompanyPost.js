@@ -25,7 +25,7 @@ const CompanyPost = () => {
         {
           // 避免有人從postman惡搞
           name:
-            companyName.split("LOGO").length == 2
+            companyName.split("LOGO").length === 2
               ? companyName.split("LOGO")[1].trim()
               : companyName.trim(),
           url: companyUrl,
@@ -76,7 +76,7 @@ const CompanyPost = () => {
               maxLength={100}
               onChange={(e) => {
                 setCompanyName(
-                  e.target.value.split("LOGO").length == 2
+                  e.target.value.split("LOGO").length === 2
                     ? e.target.value.split("LOGO")[1].trim()
                     : e.target.value.trim()
                 );

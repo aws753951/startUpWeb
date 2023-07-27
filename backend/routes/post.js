@@ -3,6 +3,9 @@ const Post = require("../models/post_model");
 const MeetPost = require("../models/meetPost_model");
 const Company = require("../models/company_model");
 const User = require("../models/user_model");
+const Conversation = require("../models/conversation_model");
+const Message = require("../models/message_model");
+
 const jobPostValidation = require("../validation").jobPostValidation;
 const meetPostValidation = require("../validation").meetPostValidation;
 const companyPostValidation = require("../validation").companyPostValidation;
@@ -317,6 +320,37 @@ router.post("/article/disagree", async (req, res) => {
     console.log(e);
     return res.status(500).send("something wrong with sending disagree");
   }
+});
+
+router.post("/conversation", async (req, res) => {
+  try {
+    let newConversation = new Conversation({});
+    let savedConversation = await newConversation.save();
+    return res.status(200).send(savedConversation);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("something wrong with build conversation");
+  }
+});
+
+router.post("/message", async (req, res) => {
+  let newMessage = new Message(req.body);
+  let savedMessage = await newMessage.save();
+  return res.status(200).send(savedMessage);
+});
+
+router.get("/allmessage", async (req, res) => {
+  let allMessage = await Message.find({
+    conversationId: "64c2a80c697e2d0c10a34e61",
+  });
+  return res.status(200).send(allMessage);
+});
+
+router.get("/sortmessage", async (req, res) => {
+  let allMessage = await Message.find({
+    conversationId: "64c2a80c697e2d0c10a34e61",
+  }).sort({ createdAt: -1 });
+  return res.status(200).send(allMessage);
 });
 
 module.exports = router;
