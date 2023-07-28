@@ -94,8 +94,8 @@ const App = () => {
   }, []);
 
   // 取得特定公司的資訊
-  let [details, setDetails] = useState({});
-  let [companyId, setCompanyId] = useState("");
+  const [details, setDetails] = useState({});
+  const [companyId, setCompanyId] = useState("");
   useEffect(() => {
     const getSpecificCompany = async () => {
       const companyDetails = await axios.get(
@@ -108,6 +108,21 @@ const App = () => {
       getSpecificCompany();
     }
   }, [companyId]);
+
+  const [chatmsg, setChatmsg] = useState([]);
+  useEffect(() => {
+    const getChatMessage = async () => {
+      const messageDetail = await axios.get(
+        process.env.REACT_APP_DB_URL + "/search/allmessage"
+      );
+      setChatmsg(messageDetail.data);
+    };
+    getChatMessage();
+  }, []);
+
+  useEffect(() => {
+    console.log(chatmsg);
+  }, [chatmsg]);
 
   const Layout = ({ meet }) => {
     return (
@@ -133,7 +148,12 @@ const App = () => {
             />
           )}
           {!expandRight && <Outlet />}
-          <Rightbar expandRight={expandRight} />
+          <Rightbar
+            user={user}
+            expandRight={expandRight}
+            chatmsg={chatmsg}
+            setChatmsg={setChatmsg}
+          />
         </div>
       </div>
     );

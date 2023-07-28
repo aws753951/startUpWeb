@@ -1,7 +1,7 @@
 import React from "react";
 const moment = require("moment-timezone");
 
-const Message = ({ mes, own }) => {
+const Message = ({ msg, own }) => {
   return (
     <div className={`flex  ${own ? "justify-end" : "justify-start"} `}>
       <div className="flex gap-[5px]">
@@ -14,25 +14,29 @@ const Message = ({ mes, own }) => {
         />
         <div className="flex flex-col">
           <div className={`flex gap-5 ${own ? "hidden" : "block"}`}>
-            <p className="text-[14px]">{mes.sender}</p>
+            <p className="text-[14px]">{msg.user_id.username}</p>
           </div>
           <p
             className={`text-[14px] text-end ${own ? "block" : "hidden"} `}
           ></p>
           <div
-            className={`flex  relative group gap-[5px] hover:messageTime:block ${
+            className={`flex w-full  relative group gap-[5px]  hover:messageTime:block ${
               own ? "justify-end" : "justify-start"
             }`}
           >
             <p
-              className={`p-[10px]  rounded-[20px] w-full ${
+              className={`p-[10px]  rounded-[20px]  ${
                 own ? "bg-green-300 text-end my-[10px]" : "bg-white"
               } break-all `}
             >
-              {mes.text}
+              {msg.message}
             </p>
-            <p className="absolute bottom-[-20px] right-0  bg-slate-500 p-[4px] rounded-[10px] text-white hidden group-hover:block">
-              {moment(mes.createdAt)
+            <p
+              className={`absolute bottom-[-20px] ${
+                !own ? "left-0" : "right-0"
+              } min-w-[170px]  bg-slate-500 p-[4px] rounded-[10px] text-white hidden group-hover:block`}
+            >
+              {moment(msg.createdAt)
                 .tz("Asia/Taipei")
                 .format("YYYY-MM-DD HH:mm:ss")}
             </p>

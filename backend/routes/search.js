@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Company = require("../models/company_model");
 const Post = require("../models/post_model");
 const MeetPost = require("../models/meetPost_model");
+const Message = require("../models/message_model");
 
 // 這個路徑是不用登入就可以查看的
 router.get("/", async (req, res) => {
@@ -153,5 +154,37 @@ router.get("/hotest", async (req, res) => {
 //     res.status(500).send("somthing wrong with finding hotest posts");
 //   }
 // });
+
+// 從眾多的message中挑選conversationId是公開聊天室的id
+router.get("/allmessage", async (req, res) => {
+  let allMessage = await Message.find(
+    {
+      conversationId: "64c2a80c697e2d0c10a34e61",
+    },
+    { message: 1, createdAt: 1, _id: 0 }
+  ).populate({
+    path: "user_id",
+    // "__v" 好像是內建的，省略他
+    select: "username",
+  });
+  return res.status(200).send(allMessage);
+});
+
+// 由前面吐最新的資料
+router.get("/sortmessage", async (req, res) => {
+  let allMessage = await Message.find(
+    {
+      conversationId: "64c2a80c697e2d0c10a34e61",
+    },
+    { message: 1, createdAt: 1, _id: 0 }
+  )
+    .populate({
+      path: "user_id",
+      // "__v" 好像是內建的，省略他
+      select: "username",
+    })
+    .sort({ createdAt: -1 });
+  return res.status(200).send(allMessage);
+});
 
 module.exports = router;

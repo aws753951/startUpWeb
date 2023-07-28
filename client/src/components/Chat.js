@@ -4,47 +4,44 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Chat = () => {
-  let [shrink, setShrink] = useState(false);
-
-  const mes = [
-    {
-      sender: "123",
-      text: "甜甜甜xxxxxxxxxxxxxxx",
-      createdAt: "2023-07-13T07:45:58.379+00:00",
-    },
-    {
-      sender: "456",
-      text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab similique laborum provident vel reprehenderit inventore corrupti consequatur ratione magni consequuntur iure perferendis repellat at ut sed aspernatur beatae, cum tempore mollitia sit ea nisi. Dicta, obcaecati. Corporis laboriosam aut dolorum optio id qui facere, voluptatem odio necessitatibus? In, doloribus labore.",
-      createdAt: "2023-07-13T07:52:01.622+00:00",
-    },
-    {
-      sender: "456",
-      text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab similique laborum provident vel reprehenderit inventore corrupti consequatur ratione magni consequuntur iure perferendis repellat at ut sed aspernatur beatae, cum tempore mollitia sit ea nisi. Dicta, obcaecati. Corporis laboriosam aut dolorum optio id qui facere, voluptatem odio necessitatibus? In, doloribus labore.",
-      createdAt: "2023-07-13T07:52:01.622+00:00",
-    },
-    {
-      sender: "123",
-      text: "甜甜甜xxxxxxxxxxxxxxx",
-      createdAt: "2023-07-13T07:45:58.379+00:00",
-    },
-  ];
+const Chat = ({ user, chatmsg, setChatmsg }) => {
+  const [shrink, setShrink] = useState(false);
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
-    console.log(jwt_token);
     if (!jwt_token) {
       window.alert("要留言請先登入");
       navigate("/login");
     } else {
       try {
-        let ans = await axios.get(`${process.env.REACT_APP_DB_URL}/post`, {
-          headers: {
-            Authorization: jwt_token,
+        if (!message) {
+          return;
+        }
+
+        // 提前先讓使用者的介面反映
+        setMessage("");
+
+        await axios.post(
+          `${process.env.REACT_APP_DB_URL}/post/message`,
+          { message },
+          {
+            headers: {
+              Authorization: jwt_token,
+            },
+          }
+        );
+
+        // 這裡的設定基本上是為了符合一開始跟伺服器要聊天資料的資料型態，由於不需要呈現id跟username，所以就用預設的，之後有需要再改成從伺服器拿到的資料呈現
+        setChatmsg([
+          ...chatmsg,
+          {
+            message,
+            user_id: { _id: user, username: "Anonymous" },
+            createdAt: Date.now(),
           },
-        });
-        console.log(ans);
+        ]);
       } catch (e) {
         window.alert("session過期，幫你重新導向登入頁面");
         navigate("/login");
@@ -98,12 +95,16 @@ const Chat = () => {
       </div>
       <div className={` ${!shrink ? "block" : "hidden"}`}>
         <div className="p-[10px] bg-blue-200  flex flex-col gap-[10px] h-[calc(100vh-227px)] overflow-scroll no-scrollbar">
-          {mes.map((c, i) => (
-            <Message mes={c} key={i} own={false} />
-          ))}
+          {chatmsg &&
+            chatmsg.map((msg, i) => (
+              <Message msg={msg} key={i} own={user === msg.user_id._id} />
+            ))}
         </div>
         <div className="p-5 flex items-end gap-2 ">
           <TextareaAutosize
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
             placeholder="在想甚麼?"
             className="w-full outline-none bg-slate-200 overflow-hidden resize-none py-[10px] px-[20px] rounded-[20px]"
           />

@@ -1,7 +1,7 @@
 import React from "react";
 import Chat from "./Chat";
 
-const Rightbar = ({ expandRight }) => {
+const Rightbar = ({ user, expandRight, chatmsg, setChatmsg }) => {
   return (
     <div
       className={`${
@@ -10,7 +10,7 @@ const Rightbar = ({ expandRight }) => {
           : "hidden scrollset md:col-span-2 xl:col-span-1 md:block"
       } `}
     >
-      <Chat />
+      <Chat user={user} chatmsg={chatmsg} setChatmsg={setChatmsg} />
     </div>
   );
 };
