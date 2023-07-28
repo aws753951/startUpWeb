@@ -109,20 +109,17 @@ const App = () => {
     }
   }, [companyId]);
 
-  const [chatmsg, setChatmsg] = useState([]);
-  useEffect(() => {
-    const getChatMessage = async () => {
-      const messageDetail = await axios.get(
-        process.env.REACT_APP_DB_URL + "/search/allmessage"
-      );
-      setChatmsg(messageDetail.data);
-    };
-    getChatMessage();
-  }, []);
+  // const [chatmsg, setChatmsg] = useState([]);
+  // useEffect(() => {
+  //   const getChatMessage = async () => {
+  //     const messageDetail = await axios.get(
+  //       process.env.REACT_APP_DB_URL + "/search/sortmessage?page=0"
+  //     );
 
-  useEffect(() => {
-    console.log(chatmsg);
-  }, [chatmsg]);
+  //     setChatmsg(messageDetail.data.reverse());
+  //   };
+  //   getChatMessage();
+  // }, []);
 
   const Layout = ({ meet }) => {
     return (
@@ -151,8 +148,8 @@ const App = () => {
           <Rightbar
             user={user}
             expandRight={expandRight}
-            chatmsg={chatmsg}
-            setChatmsg={setChatmsg}
+            // chatmsg={chatmsg}
+            // setChatmsg={setChatmsg}
           />
         </div>
       </div>

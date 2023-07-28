@@ -14,7 +14,10 @@ const Message = ({ msg, own }) => {
         />
         <div className="flex flex-col">
           <div className={`flex gap-5 ${own ? "hidden" : "block"}`}>
-            <p className="text-[14px]">{msg.user_id.username}</p>
+            <p className="text-[14px]">
+              {/* 因應使用者可能被刪除，但仍然存在於資料庫中的紀錄 */}
+              {msg.user_id ? msg.user_id.username : "Anonymous"}
+            </p>
           </div>
           <p
             className={`text-[14px] text-end ${own ? "block" : "hidden"} `}
@@ -24,13 +27,13 @@ const Message = ({ msg, own }) => {
               own ? "justify-end" : "justify-start"
             }`}
           >
-            <p
+            <pre
               className={`p-[10px]  rounded-[20px]  ${
                 own ? "bg-green-300 text-end my-[10px]" : "bg-white"
               } break-all `}
             >
               {msg.message}
-            </p>
+            </pre>
             <p
               className={`absolute bottom-[-20px] ${
                 !own ? "left-0" : "right-0"

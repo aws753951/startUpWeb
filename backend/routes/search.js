@@ -157,21 +157,7 @@ router.get("/hotest", async (req, res) => {
 
 // 從眾多的message中挑選conversationId是公開聊天室的id
 router.get("/allmessage", async (req, res) => {
-  let allMessage = await Message.find(
-    {
-      conversationId: "64c2a80c697e2d0c10a34e61",
-    },
-    { message: 1, createdAt: 1, _id: 0 }
-  ).populate({
-    path: "user_id",
-    // "__v" 好像是內建的，省略他
-    select: "username",
-  });
-  return res.status(200).send(allMessage);
-});
-
-// 由前面吐最新的資料
-router.get("/sortmessage", async (req, res) => {
+  let { page } = req.query;
   let allMessage = await Message.find(
     {
       conversationId: "64c2a80c697e2d0c10a34e61",
@@ -183,7 +169,28 @@ router.get("/sortmessage", async (req, res) => {
       // "__v" 好像是內建的，省略他
       select: "username",
     })
-    .sort({ createdAt: -1 });
+    .skip(page * 5)
+    .limit(5);
+  return res.status(200).send(allMessage);
+});
+
+// 由前面吐最新的資料
+router.get("/sortmessage", async (req, res) => {
+  let { page } = req.query;
+  let allMessage = await Message.find(
+    {
+      conversationId: "64c2a80c697e2d0c10a34e61",
+    },
+    { message: 1, createdAt: 1, _id: 0 }
+  )
+    .populate({
+      path: "user_id",
+      // "__v" 好像是內建的，省略他
+      select: "username",
+    })
+    .sort({ createdAt: -1 })
+    .skip(page * 20)
+    .limit(20);
   return res.status(200).send(allMessage);
 });
 

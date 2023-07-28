@@ -3,7 +3,7 @@ const Post = require("../models/post_model");
 const MeetPost = require("../models/meetPost_model");
 const Company = require("../models/company_model");
 const User = require("../models/user_model");
-const Conversation = require("../models/conversation_model");
+// const Conversation = require("../models/conversation_model");
 const Message = require("../models/message_model");
 
 const jobPostValidation = require("../validation").jobPostValidation;
@@ -18,6 +18,12 @@ router.get("/", (req, res) => {
 // 創建新的公司資訊
 router.post("/company", async (req, res) => {
   try {
+    const { user_id } = req.user;
+    const foundUser = await User.findOne({ _id: user_id });
+    if (!foundUser) {
+      return res.status(403).send("can't find User");
+    }
+
     let { error } = companyPostValidation(req.body);
     if (error) {
       return res.status(403).send(error.details[0].message);
@@ -49,10 +55,10 @@ router.post("/article/post", async (req, res) => {
     if (!foundCompany) {
       return res.status(403).send("company not found");
     }
-    const { email } = req.user;
-    let foundUser = await User.findOne({ email });
+    const { user_id } = req.user;
+    const foundUser = await User.findOne({ _id: user_id });
     if (!foundUser) {
-      return res.status(403).send("user not found");
+      return res.status(403).send("can't find User");
     }
     const { id, username } = foundUser;
     let object = {
@@ -111,10 +117,11 @@ router.post("/meetArticle/post", async (req, res) => {
     if (!foundCompany) {
       return res.status(403).send("company not found");
     }
-    const { email } = req.user;
-    let foundUser = await User.findOne({ email });
+
+    const { user_id } = req.user;
+    const foundUser = await User.findOne({ _id: user_id });
     if (!foundUser) {
-      return res.status(403).send("user not found");
+      return res.status(403).send("can't find User");
     }
 
     const { id, username } = foundUser;
@@ -146,7 +153,11 @@ router.post("/meetArticle/post", async (req, res) => {
 
 // 針對特定文章進行留言
 router.post("/article", async (req, res) => {
-  const user_id = req.user.user_id;
+  const { user_id } = req.user;
+  const foundUser = await User.findOne({ _id: user_id });
+  if (!foundUser) {
+    return res.status(403).send("can't find User");
+  }
   const date = Date.now();
   const { article_id, meetArticle_id, message } = req.body;
   try {
@@ -197,7 +208,11 @@ router.post("/article", async (req, res) => {
 // 針對特定文章進行同意或不同意
 router.post("/article/agree", async (req, res) => {
   try {
-    const user_id = req.user.user_id;
+    const { user_id } = req.user;
+    const foundUser = await User.findOne({ _id: user_id });
+    if (!foundUser) {
+      return res.status(403).send("can't find User");
+    }
     const { article_id, meetArticle_id } = req.body;
     if (article_id) {
       const AgreePost = await Post.findOne({ _id: article_id, good: user_id });
@@ -260,7 +275,11 @@ router.post("/article/agree", async (req, res) => {
 // 針對特定文章進行同意或不同意
 router.post("/article/disagree", async (req, res) => {
   try {
-    const user_id = req.user.user_id;
+    const { user_id } = req.user;
+    const foundUser = await User.findOne({ _id: user_id });
+    if (!foundUser) {
+      return res.status(403).send("can't find User");
+    }
     const { article_id, meetArticle_id } = req.body;
     if (article_id) {
       const AgreePost = await Post.findOne({ _id: article_id, good: user_id });
@@ -338,6 +357,12 @@ router.post("/message", async (req, res) => {
   try {
     // 由 "user_id""message""conversationId" 組成Message，username由search的路徑populate呈現出來
     const { user_id } = req.user; // jwt提供
+
+    // jwt是合法的，但使用者已經被刪除了
+    const foundUser = await User.findOne({ _id: user_id });
+    if (!foundUser) {
+      return res.status(403).send("can't find User");
+    }
     const { message } = req.body;
     const conversationId = "64c2a80c697e2d0c10a34e61"; //目前僅開放一個chatroot
     let newMessage = new Message({ user_id, message, conversationId });

@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Chat = ({ user, chatmsg, setChatmsg }) => {
-  const [shrink, setShrink] = useState(false);
-  const [message, setMessage] = useState("");
-
+// const Chat = ({ user, chatmsg, setChatmsg }) => {
+const Chat = ({ user }) => {
   const navigate = useNavigate();
+  const [shrink, setShrink] = useState(true);
+  const [message, setMessage] = useState("");
+  const [page, setPage] = useState(1);
+  const [chatmsg, setChatmsg] = useState([]);
+  const [toScroll, setToScroll] = useState(true); // 讓加載更多的時候，不會讓聊天滾到最下面，做個一次性開關
+
+  const chatBoxRef = useRef(null); // 建立對話框的引用
+  const isScrollingRef = useRef(false);
+  // 使用 useEffect 來監聽 chatmsg 的變化，並在變化時將滾動位置設定為最底部
+  // 需檢查是不是會影響編譯.....................................................????
+  useEffect(() => {
+    // 純粹配合每次聊天20筆，當20筆才開始往下滑(因應一開始刷新頁面才做事，其餘就不要往下滑了)
+    if (chatBoxRef.current && toScroll) {
+      chatBoxRef.current.scrollIntoView();
+    }
+    // 加載訊息時，會調成false，這時chatmsg會發生改變，所以走一遍useEffect，走完後才打開開關
+    setToScroll(true);
+  }, [chatmsg]);
+
+  const handleShrink = async () => {
+    setShrink(!shrink);
+    const messageDetail = await axios.get(
+      process.env.REACT_APP_DB_URL + "/search/sortmessage?page=0"
+    );
+
+    setChatmsg(messageDetail.data.reverse());
+  };
+
   const handleMessage = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
@@ -49,6 +75,27 @@ const Chat = ({ user, chatmsg, setChatmsg }) => {
     }
   };
 
+  const handleMore = async () => {
+    setToScroll(false);
+    setPage((prev) => prev + 1);
+    const messageDetail = await axios.get(
+      process.env.REACT_APP_DB_URL + `/search/sortmessage?page=${page}`
+    );
+    setChatmsg((prev) => messageDetail.data.reverse().concat(prev));
+  };
+
+  const handleKeyDown = (event) => {
+    // 如果按下的是 Enter 鍵（keyCode 為 13），就阻止預設行為
+    if (event.keyCode === 13) {
+      // 按下shift enter 則不送出，則發揮TextareaAutosize本身的效果
+      if (event.shiftKey) {
+        return;
+      }
+      event.preventDefault();
+      // 在這裡可以執行送出訊息的相關邏輯，例如呼叫 sendMessage 函數
+      handleMessage();
+    }
+  };
   return (
     <div className="mt-2 shadow-lg bg-white rounded-[10px] py-1 ">
       <div className="flex items-center justify-between">
@@ -62,9 +109,7 @@ const Chat = ({ user, chatmsg, setChatmsg }) => {
             strokeWidth="1.5"
             stroke="currentColor"
             className="w-6 h-6 mr-2 cursor-pointer"
-            onClick={() => {
-              setShrink(!shrink);
-            }}
+            onClick={handleShrink}
           >
             <path
               strokeLinecap="round"
@@ -81,9 +126,7 @@ const Chat = ({ user, chatmsg, setChatmsg }) => {
             strokeWidth="1.5"
             stroke="currentColor"
             className="w-6 h-6  mr-2 cursor-pointer"
-            onClick={() => {
-              setShrink(!shrink);
-            }}
+            onClick={handleShrink}
           >
             <path
               strokeLinecap="round"
@@ -94,36 +137,61 @@ const Chat = ({ user, chatmsg, setChatmsg }) => {
         )}
       </div>
       <div className={` ${!shrink ? "block" : "hidden"}`}>
-        <div className="p-[10px] bg-blue-200  flex flex-col gap-[10px] h-[calc(100vh-227px)] overflow-scroll no-scrollbar">
-          {chatmsg &&
-            chatmsg.map((msg, i) => (
-              <Message msg={msg} key={i} own={user === msg.user_id._id} />
-            ))}
-        </div>
-        <div className="p-5 flex items-end gap-2 ">
-          <TextareaAutosize
-            onChange={(e) => {
-              setMessage(e.target.value);
-            }}
-            placeholder="在想甚麼?"
-            className="w-full outline-none bg-slate-200 overflow-hidden resize-none py-[10px] px-[20px] rounded-[20px]"
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mb-[10px] cursor-pointer "
-            onClick={handleMessage}
+        <div className="p-[10px]  bg-blue-200  flex flex-col gap-[10px] h-[calc(100vh-227px)] overflow-y-auto no-scrollbar">
+          <div
+            onClick={handleMore}
+            className="text-center cursor-pointer text-gray-500"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-            />
-          </svg>
+            看更多
+          </div>
+          {chatmsg &&
+            chatmsg.length > 0 &&
+            chatmsg.map((msg, i) => (
+              <div key={i}>
+                <Message
+                  msg={msg}
+                  // 因應使用者可能被刪除，但仍然存在於資料庫中的紀錄
+                  own={msg.user_id ? user === msg.user_id._id : false}
+                />
+              </div>
+            ))}
+          <div ref={chatBoxRef} />
         </div>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleMessage();
+          }}
+        >
+          <div className="p-5 flex items-end gap-2 ">
+            <TextareaAutosize
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+              value={message}
+              placeholder="在想甚麼?"
+              className="w-full outline-none bg-slate-200 overflow-hidden resize-none py-[10px] px-[20px] rounded-[20px]"
+            />
+            <button type="submit">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 mb-[10px] cursor-pointer "
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                />
+              </svg>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

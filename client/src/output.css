@@ -638,6 +638,10 @@ input[type="number"]::-webkit-outer-spin-button,
   bottom: -20px;
 }
 
+.left-0 {
+  left: 0px;
+}
+
 .right-0 {
   right: 0px;
 }
@@ -656,14 +660,6 @@ input[type="number"]::-webkit-outer-spin-button,
 
 .top-\[25px\] {
   top: 25px;
-}
-
-.bottom-\[0px\] {
-  bottom: 0px;
-}
-
-.left-0 {
-  left: 0px;
 }
 
 .z-10 {
@@ -882,36 +878,12 @@ input[type="number"]::-webkit-outer-spin-button,
   width: 100%;
 }
 
-.w-\[300px\] {
-  width: 300px;
+.min-w-\[170px\] {
+  min-width: 170px;
 }
 
 .min-w-\[60px\] {
   min-width: 60px;
-}
-
-.min-w-\[150px\] {
-  min-width: 150px;
-}
-
-.min-w-\[200px\] {
-  min-width: 200px;
-}
-
-.min-w-\[1750px\] {
-  min-width: 1750px;
-}
-
-.min-w-\[175px\] {
-  min-width: 175px;
-}
-
-.min-w-\[165px\] {
-  min-width: 165px;
-}
-
-.min-w-\[170px\] {
-  min-width: 170px;
 }
 
 .max-w-\[60\%\] {
@@ -920,22 +892,6 @@ input[type="number"]::-webkit-outer-spin-button,
 
 .max-w-md {
   max-width: 28rem;
-}
-
-.max-w-\[150px\] {
-  max-width: 150px;
-}
-
-.max-w-\[300px\] {
-  max-width: 300px;
-}
-
-.max-w-\[80\%\] {
-  max-width: 80%;
-}
-
-.max-w-\[100\%\] {
-  max-width: 100%;
 }
 
 .flex-1 {
@@ -979,6 +935,10 @@ input[type="number"]::-webkit-outer-spin-button,
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-auto {
+  cursor: auto;
 }
 
 .resize-none {
