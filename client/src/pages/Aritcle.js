@@ -43,7 +43,7 @@ const Aritcle = ({ meet, setMeet }) => {
   }, [article_id, meetArticle_id, setMeet]);
 
   return (
-    <div className="col-span-5 md:col-span-3">
+    <div className="col-span-5 md:col-span-3 scrollset ">
       <Link to={`/company/?companyId=${article.companyId}`}>
         <ViewSmall meet={meet} companyName={article.companyName} />
       </Link>

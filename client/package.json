@@ -21,6 +21,7 @@
     "react-scripts": "5.0.1",
     "react-textarea-autosize": "^8.5.2",
     "recharts": "^2.7.2",
+    "socket.io-client": "^4.7.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -18,7 +18,7 @@ router.get(
       let processUser;
       if (!foundUser) {
         console.log("no user");
-        let newUser = new User({ email });
+        let newUser = new User({ email, IP: req.userIP });
         processUser = await newUser.save();
       } else {
         processUser = foundUser;
@@ -101,7 +101,7 @@ router.get("/confirm/:token", async (req, res) => {
       return res.status(403).send("User has already been registered");
     } else {
       console.log("Creating a new user...");
-      let newUser = new User({ email, password });
+      let newUser = new User({ email, password, IP: req.userIP });
       await newUser.save();
       return res.status(200).send("User has been saved");
     }

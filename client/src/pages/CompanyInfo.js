@@ -15,7 +15,7 @@ const CompanyInfo = ({ details, setCompanyId, meet, setMeet }) => {
   }, [companyId, setCompanyId]);
 
   return (
-    <div className="col-span-5 md:col-span-3 ">
+    <div className="col-span-5 md:col-span-3 scrollset ">
       {details && (
         <View
           // 提供給寫工作經驗時作為req.body包著的東西

@@ -35,6 +35,7 @@ const postSchema = new Schema(
     comments: { type: Array, default: [] },
     date: { type: Date, default: "" },
     hidden: { type: Boolean, default: false },
+    IP: String,
   },
   { timestamps: true }
 );

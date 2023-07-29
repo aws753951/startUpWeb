@@ -18,6 +18,7 @@ const userSchema = new Schema(
       type: String,
       default: "Anonymous",
     },
+    IP: String,
   },
   { timestamps: true }
 );

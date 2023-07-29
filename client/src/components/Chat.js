@@ -3,8 +3,8 @@ import Message from "./Message";
 import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { io } from "socket.io-client";
 
-// const Chat = ({ user, chatmsg, setChatmsg }) => {
 const Chat = ({ user }) => {
   const navigate = useNavigate();
   const [shrink, setShrink] = useState(true);
@@ -12,19 +12,27 @@ const Chat = ({ user }) => {
   const [page, setPage] = useState(1);
   const [chatmsg, setChatmsg] = useState([]);
   const [toScroll, setToScroll] = useState(true); // 讓加載更多的時候，不會讓聊天滾到最下面，做個一次性開關
-
+  const socket = useRef();
   const chatBoxRef = useRef(null); // 建立對話框的引用
-  const isScrollingRef = useRef(false);
-  // 使用 useEffect 來監聽 chatmsg 的變化，並在變化時將滾動位置設定為最底部
-  // 需檢查是不是會影響編譯.....................................................????
+  const [arrive, setArrive] = useState(null);
+
   useEffect(() => {
-    // 純粹配合每次聊天20筆，當20筆才開始往下滑(因應一開始刷新頁面才做事，其餘就不要往下滑了)
+    socket.current = io("ws://localhost:6969");
+    socket.current.on("getMessage", (data) => {
+      // data是 object
+      setArrive(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    arrive && setChatmsg((prev) => [...prev, arrive]);
+  }, [arrive]);
+
+  useEffect(() => {
     if (chatBoxRef.current && toScroll) {
-      chatBoxRef.current.scrollIntoView();
+      chatBoxRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    // 加載訊息時，會調成false，這時chatmsg會發生改變，所以走一遍useEffect，走完後才打開開關
-    setToScroll(true);
-  }, [chatmsg]);
+  }, [chatmsg, toScroll]);
 
   const handleShrink = async () => {
     setShrink(!shrink);
@@ -45,10 +53,7 @@ const Chat = ({ user }) => {
         if (!message) {
           return;
         }
-
-        // 提前先讓使用者的介面反映
-        setMessage("");
-
+        setToScroll(true);
         await axios.post(
           `${process.env.REACT_APP_DB_URL}/post/message`,
           { message },
@@ -59,15 +64,15 @@ const Chat = ({ user }) => {
           }
         );
 
-        // 這裡的設定基本上是為了符合一開始跟伺服器要聊天資料的資料型態，由於不需要呈現id跟username，所以就用預設的，之後有需要再改成從伺服器拿到的資料呈現
-        setChatmsg([
-          ...chatmsg,
-          {
-            message,
-            user_id: { _id: user, username: "Anonymous" },
-            createdAt: Date.now(),
-          },
-        ]);
+        // 設定傳到socket伺服器，記得於前面useEffect去接收
+        // 之後使用者名稱要依照自己的去調整時再調整
+        socket.current.emit("sendText", {
+          message,
+          user_id: { _id: user, username: "Anonymous" },
+          createdAt: Date.now(),
+        });
+
+        setMessage("");
       } catch (e) {
         window.alert("session過期，幫你重新導向登入頁面");
         navigate("/login");

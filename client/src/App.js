@@ -20,6 +20,14 @@ const App = () => {
   const [expandRight, setExpandRight] = useState(false);
   const [user, setUser] = useState("");
 
+  const [newest, setNewest] = useState("");
+  const [hotest, setHotest] = useState("");
+  const [newestMeet, setNewestMeet] = useState("");
+
+  // 取得特定公司的資訊
+  const [details, setDetails] = useState({});
+  const [companyId, setCompanyId] = useState("");
+
   // 給瀏覽器賦予使用者的ID
   useEffect(() => {
     const getUserId = async () => {
@@ -53,10 +61,6 @@ const App = () => {
     getUserId();
   }, [setUser]);
 
-  let [newest, setNewest] = useState("");
-  let [hotest, setHotest] = useState("");
-  let [newestMeet, setNewestMeet] = useState("");
-
   // 取得最新文章與熱門文章
   useEffect(() => {
     const getNewest = async () => {
@@ -82,20 +86,8 @@ const App = () => {
       setNewestMeet(response.data);
     };
     getNewestMeet();
-
-    // const getConceal = async () => {
-    //   let response = await axios.get(
-    //     process.env.REACT_APP_DB_URL + "/search/conceal"
-    //   );
-    //   setConceal(response.data);
-    //   console.log(response.data);
-    // };
-    // getConceal();
   }, []);
 
-  // 取得特定公司的資訊
-  const [details, setDetails] = useState({});
-  const [companyId, setCompanyId] = useState("");
   useEffect(() => {
     const getSpecificCompany = async () => {
       const companyDetails = await axios.get(
@@ -108,18 +100,6 @@ const App = () => {
       getSpecificCompany();
     }
   }, [companyId]);
-
-  // const [chatmsg, setChatmsg] = useState([]);
-  // useEffect(() => {
-  //   const getChatMessage = async () => {
-  //     const messageDetail = await axios.get(
-  //       process.env.REACT_APP_DB_URL + "/search/sortmessage?page=0"
-  //     );
-
-  //     setChatmsg(messageDetail.data.reverse());
-  //   };
-  //   getChatMessage();
-  // }, []);
 
   const Layout = ({ meet }) => {
     return (
@@ -145,12 +125,7 @@ const App = () => {
             />
           )}
           {!expandRight && <Outlet />}
-          <Rightbar
-            user={user}
-            expandRight={expandRight}
-            // chatmsg={chatmsg}
-            // setChatmsg={setChatmsg}
-          />
+          <Rightbar user={user} expandRight={expandRight} />
         </div>
       </div>
     );
@@ -161,16 +136,7 @@ const App = () => {
       <Routes>
         {/* 調整背景 */}
         <Route path="/" element={<Layout meet={meet} />}>
-          <Route
-            index
-            element={
-              <Home
-                expandLeft={expandLeft}
-                setExpandLeft={setExpandLeft}
-                setUser={setUser}
-              />
-            }
-          />
+          <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route
             path="company"

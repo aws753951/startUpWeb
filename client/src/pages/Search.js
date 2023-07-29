@@ -48,7 +48,7 @@ const Search = () => {
   };
 
   return (
-    <div className="col-span-5 md:col-span-3">
+    <div className="col-span-5 md:col-span-3 scrollset">
       <div className="flex flex-col md:mx-[10px] gap-[10px] mt-2">
         {!write &&
           company &&

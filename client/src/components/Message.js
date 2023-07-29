@@ -6,9 +6,9 @@ const Message = ({ msg, own }) => {
     <div className={`flex  ${own ? "justify-end" : "justify-start"} `}>
       <div className="flex gap-[5px]">
         <img
-          src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600"
+          src={require("../assets/photo.png")}
           alt=""
-          className={`w-[50px] h-[50px] rounded-full object-cover ${
+          className={`w-[40px] h-[40px] rounded-full object-cover ${
             own ? "hidden" : "block"
           }`}
         />
@@ -28,7 +28,7 @@ const Message = ({ msg, own }) => {
             }`}
           >
             <pre
-              className={`p-[10px]  rounded-[20px]  ${
+              className={`px-[7px] py-[2px] rounded-[10px]  ${
                 own ? "bg-green-300 text-end my-[10px]" : "bg-white"
               } break-all `}
             >

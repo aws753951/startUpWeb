@@ -41,7 +41,7 @@ const Post = ({ data, meet }) => {
     setGoodCount(data.good.length);
     setBad(data.bad.includes(user_id));
     setGood(data.good.includes(user_id));
-  }, [data]);
+  }, [data, user_id]);
 
   let data_;
   if (!meet) {

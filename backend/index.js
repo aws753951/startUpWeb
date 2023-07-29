@@ -24,17 +24,6 @@ app.use(express.urlencoded({ extended: true })); //解析post當中的參數(x-w
 app.use(morgan("common")); //後續可針對使用者搜尋做log
 app.use(cors({}));
 
-app.use("/auth", authRoute);
-
-app.use(
-  "/post",
-  // 他會去找require("./config/passport")(passport)當中的passport.use(new JwtStrategy)
-  passport.authenticate("jwt", { session: false }),
-  postRoute
-);
-
-app.use("/search", searchRoute);
-
 app.set("trust proxy", true); // 设置 trust proxy，信任代理服务器
 
 app.use((req, res, next) => {
@@ -61,8 +50,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send(req.userIP);
-});
+app.use("/auth", authRoute);
+
+app.use(
+  "/post",
+  // 他會去找require("./config/passport")(passport)當中的passport.use(new JwtStrategy)
+  passport.authenticate("jwt", { session: false }),
+  postRoute
+);
+
+app.use("/search", searchRoute);
 
 app.listen("8080", () => console.log(`8080 running`));

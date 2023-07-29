@@ -66,6 +66,7 @@ router.post("/article/post", async (req, res) => {
       user: id,
       username,
       companyName: foundCompany.name,
+      IP: req.userIP,
     };
 
     const newPost = new Post(object);
@@ -130,6 +131,7 @@ router.post("/meetArticle/post", async (req, res) => {
       user: id,
       username,
       companyName: foundCompany.name,
+      IP: req.userIP,
     };
 
     const newMeetPost = new MeetPost(object);
@@ -169,7 +171,13 @@ router.post("/article", async (req, res) => {
         { _id: article_id },
         {
           $push: {
-            comments: { user_id, username, message, date: date.toString() },
+            comments: {
+              user_id,
+              username,
+              message,
+              date: date.toString(),
+              IP: req.userIP,
+            },
           },
         },
 
@@ -187,7 +195,13 @@ router.post("/article", async (req, res) => {
         { _id: meetArticle_id },
         {
           $push: {
-            comments: { user_id, username, message, date: date.toString() },
+            comments: {
+              user_id,
+              username,
+              message,
+              date: date.toString(),
+              IP: req.userIP,
+            },
           },
         },
         { new: true }
@@ -365,7 +379,12 @@ router.post("/message", async (req, res) => {
     }
     const { message } = req.body;
     const conversationId = "64c2a80c697e2d0c10a34e61"; //目前僅開放一個chatroot
-    let newMessage = new Message({ user_id, message, conversationId });
+    let newMessage = new Message({
+      user_id,
+      message,
+      conversationId,
+      IP: req.userIP,
+    });
     let savedMessage = await newMessage.save();
     return res.status(200).send(savedMessage);
   } catch (e) {

@@ -9,6 +9,7 @@ const messageSchema = new Schema(
     },
     conversationId: mongoose.Schema.Types.ObjectId,
     message: String,
+    IP: String,
   },
   { timestamps: true }
 );
