@@ -274,7 +274,7 @@ const View = ({
             {companyName ? companyName : "加載中..."}
           </div>
           <div className="text-center">
-            薪資平均數: {data3 ? data3 : "加載中..."} 萬
+            薪資中位數: {data3 ? data3 : "加載中..."} 萬
           </div>
           <div className="text-center">
             平均滿意度: {data2 ? data2[0].A : "加載中..."} 分
