@@ -17,7 +17,7 @@ const Chat = ({ user }) => {
   const [arrive, setArrive] = useState(null);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8080");
+    socket.current = io(process.env.REACT_APP_DB_URL);
     socket.current.on("getMessage", (data) => {
       // data是 object
       setArrive(data);

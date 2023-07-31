@@ -23,7 +23,7 @@ mongoose
 app.use(express.json()); //解析JSON格式的請求，並把其附加到req.body
 app.use(express.urlencoded({ extended: true })); //解析post當中的參數(x-www-form-urlencoded)，附加到req.body
 app.use(morgan("common")); //後續可針對使用者搜尋做log
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors({}));
 
 app.set("trust proxy", true); // 设置 trust proxy，信任代理服务器
 
@@ -68,11 +68,13 @@ app.use(
   deleteRoute
 );
 
-const server = app.listen("8080", () => console.log(`8080 running`));
+const server = app.listen(process.env.PORT || 10000, () =>
+  console.log(`Express server running on port ${server.address().port}`)
+);
 
 const io = require("socket.io")(server, {
   // 同源政策，要讓其接受前端該domain與port，才會通
-  cors: { origin: process.env.CLIENT_URL },
+  cors: {},
 });
 
 io.on("connection", (socket) => {
