@@ -68,7 +68,7 @@ app.use(
   deleteRoute
 );
 
-const server = app.listen(process.env.PORT || 10000, () =>
+const server = app.listen(process.env.PORT || 8080, () =>
   console.log(`Express server running on port ${server.address().port}`)
 );
 

@@ -85,7 +85,6 @@ const View = ({
 
   // 計算平均年薪
   function getWage(data) {
-    console.log(data);
     const yearwages_list = data.map((item) => item.yearwage);
     const median = getMedian(yearwages_list);
     return median.toFixed(0);
