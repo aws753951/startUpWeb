@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
         },
       ]);
       return res.status(200).send(foundCompany);
-      // 查詢特定文章的comments  /search/?article_id=..
     }
   } catch (e) {
     console.log(e);
@@ -38,6 +37,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// 取得該文章的留言
 router.post("/comments", async (req, res) => {
   const { article_id, meetArticle_id } = req.body;
   try {
@@ -54,7 +54,7 @@ router.post("/comments", async (req, res) => {
   }
 });
 
-// 查詢特定工作文章 /search/article/?article_id=....
+// 查詢特定工作文章
 router.get("/article", async (req, res) => {
   try {
     const { article_id, meetArticle_id } = req.query;
@@ -71,6 +71,7 @@ router.get("/article", async (req, res) => {
   }
 });
 
+// 取得最新工作文章
 router.get("/newest", async (req, res) => {
   try {
     let sortingPost = await Post.find({}, { companyName: 1, oneword: 1 })
@@ -85,6 +86,7 @@ router.get("/newest", async (req, res) => {
   }
 });
 
+// 取得最新面試文章
 router.get("/newestMeet", async (req, res) => {
   try {
     let sortingPost = await MeetPost.find({}, { companyName: 1, oneword: 1 })
@@ -99,6 +101,7 @@ router.get("/newestMeet", async (req, res) => {
   }
 });
 
+// 取得熱門文章 (讚+倒讚+留言數)
 router.get("/hotest", async (req, res) => {
   try {
     let sortingPost = await Post.aggregate([
@@ -106,7 +109,13 @@ router.get("/hotest", async (req, res) => {
         $project: {
           companyName: 1,
           oneword: 1,
-          sumField: { $add: [{ $size: "$good" }, { $size: "$bad" }] }, // 计算 field1 和 field2 相加的结果并存为 sumField
+          sumField: {
+            $add: [
+              { $size: "$good" },
+              { $size: "$bad" },
+              { $size: "$comments" },
+            ],
+          }, // 计算 field1 和 field2 相加的结果并存为 sumField
         },
       },
       {
@@ -122,61 +131,10 @@ router.get("/hotest", async (req, res) => {
   }
 });
 
-// 目前先不做屏蔽的功能
-// router.get("/conceal", async (req, res) => {
-//   try {
-//     let sortingPost = await Post.aggregate([
-//       {
-//         $project: {
-//           companyName: 1,
-//           oneword: 1,
-//           diffField: { $subtract: [{ $size: "$bad" }, { $size: "$good" }] }, // 计算 field1 和 field2 相加的结果并存为 sumField
-//         },
-//       },
-//       {
-//         $redact: {
-//           $cond: {
-//             if: { $gte: ["$diffField", 30] },
-//             then: "$$KEEP",
-//             else: "$$PRUNE",
-//           },
-//         },
-//       },
-//       {
-//         $sort: {
-//           diffField: -1, // 按照 diffField 升序排序，-1 表示降序排序
-//         },
-//       },
-//     ]).limit(30);
-//     res.status(200).send(sortingPost);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).send("somthing wrong with finding hotest posts");
-//   }
-// });
-
-// 從眾多的message中挑選conversationId是公開聊天室的id
-router.get("/allmessage", async (req, res) => {
-  let { page } = req.query;
-  let allMessage = await Message.find(
-    {
-      conversationId: "64c2a80c697e2d0c10a34e61",
-    },
-    { message: 1, createdAt: 1, _id: 0 }
-  )
-    .populate({
-      path: "user_id",
-      // "__v" 好像是內建的，省略他
-      select: "username",
-    })
-    .skip(page * 5)
-    .limit(5);
-  return res.status(200).send(allMessage);
-});
-
+// 從眾多的message中挑選conversationId是公開聊天室的id (目前僅提供社畜廣場)
 // 由前面吐最新的資料
 router.get("/sortmessage", async (req, res) => {
-  let { page } = req.query;
+  let { skip } = req.query;
   let allMessage = await Message.find(
     {
       conversationId: "64c2a80c697e2d0c10a34e61",
@@ -189,7 +147,7 @@ router.get("/sortmessage", async (req, res) => {
       select: "username",
     })
     .sort({ createdAt: -1 })
-    .skip(page * 20)
+    .skip(skip)
     .limit(20);
   return res.status(200).send(allMessage);
 });

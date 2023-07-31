@@ -43,6 +43,7 @@ router.post("/company", async (req, res) => {
   }
 });
 
+// 發布工作文章經驗
 router.post("/article/post", async (req, res) => {
   try {
     // joi
@@ -106,6 +107,7 @@ router.post("/article/post", async (req, res) => {
   }
 });
 
+// 發布面試文章經驗
 router.post("/meetArticle/post", async (req, res) => {
   try {
     // joi
@@ -355,7 +357,7 @@ router.post("/article/disagree", async (req, res) => {
   }
 });
 
-// 新增會議室，新增完就可以關掉了
+// 新增會議室(社畜廣場)，新增完就可以關掉了
 // router.post("/conversation", async (req, res) => {
 //   try {
 //     let newConversation = new Conversation({});
@@ -367,6 +369,7 @@ router.post("/article/disagree", async (req, res) => {
 //   }
 // });
 
+// 針對社畜廣場留言
 router.post("/message", async (req, res) => {
   try {
     // 由 "user_id""message""conversationId" 組成Message，username由search的路徑populate呈現出來

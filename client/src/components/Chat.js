@@ -4,12 +4,12 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { isEqual } from "lodash";
 
 const Chat = ({ user }) => {
   const navigate = useNavigate();
   const [shrink, setShrink] = useState(true);
   const [message, setMessage] = useState("");
-  const [page, setPage] = useState(1);
   const [chatmsg, setChatmsg] = useState([]);
   const [toScroll, setToScroll] = useState(true); // 讓加載更多的時候，不會讓聊天滾到最下面，做個一次性開關
   const socket = useRef();
@@ -17,7 +17,7 @@ const Chat = ({ user }) => {
   const [arrive, setArrive] = useState(null);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:6969");
+    socket.current = io("ws://localhost:8080");
     socket.current.on("getMessage", (data) => {
       // data是 object
       setArrive(data);
@@ -82,11 +82,18 @@ const Chat = ({ user }) => {
 
   const handleMore = async () => {
     setToScroll(false);
-    setPage((prev) => prev + 1);
     const messageDetail = await axios.get(
-      process.env.REACT_APP_DB_URL + `/search/sortmessage?page=${page}`
+      process.env.REACT_APP_DB_URL +
+        `/search/sortmessage?skip=${chatmsg.length}`
     );
-    setChatmsg((prev) => messageDetail.data.reverse().concat(prev));
+
+    // 檢查messageDetail.data中的每一筆資料是否已存在於chatmsg中，若不存在才加入
+    const newMessages = messageDetail.data.reverse().filter((message) => {
+      return !chatmsg.some((existingMessage) =>
+        isEqual(existingMessage, message)
+      );
+    });
+    setChatmsg((prev) => newMessages.concat(prev));
   };
 
   const handleKeyDown = (event) => {

@@ -8,7 +8,6 @@ const CompanyPost = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [companyUrl, setCompanyUrl] = useState("");
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleCompanySubmit = async () => {

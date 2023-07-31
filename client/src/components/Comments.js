@@ -10,11 +10,9 @@ const Comments = ({ meet, comments, setComments, article_id }) => {
   if (meet) {
     meetArticle_id = article_id;
   }
-
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [sorting, setSorting] = useState(false);
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleMessage = async () => {

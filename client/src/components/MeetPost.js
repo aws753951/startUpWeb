@@ -6,12 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 const MeetPost = ({ companyId, isOpen, setIsOpen }) => {
   const navigate = useNavigate();
-  let [jobname, setJobname] = useState("");
-  let [seniority, setSeniority] = useState("");
-  let [yearwage, setYearwage] = useState("");
-  let [satisfaction, setSatisfaction] = useState("");
-  let [experience, setExperience] = useState("");
-  let [oneword, setOneword] = useState("");
+  const [jobname, setJobname] = useState("");
+  const [seniority, setSeniority] = useState("");
+  const [yearwage, setYearwage] = useState("");
+  const [satisfaction, setSatisfaction] = useState("");
+  const [experience, setExperience] = useState("");
+  const [oneword, setOneword] = useState("");
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 

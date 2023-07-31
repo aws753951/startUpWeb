@@ -13,7 +13,7 @@ import CompanyInfo from "./pages/CompanyInfo";
 import Home from "./pages/Home";
 import Aritcle from "./pages/Aritcle";
 import axios from "axios";
-
+import { Helmet } from "react-helmet";
 const App = () => {
   const [meet, setMeet] = useState(false);
   const [expandLeft, setExpandLeft] = useState(false);
@@ -132,34 +132,48 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* 調整背景 */}
-        <Route path="/" element={<Layout meet={meet} />}>
-          <Route index element={<Home />} />
-          <Route path="search" element={<Search />} />
-          <Route
-            path="company"
-            element={
-              <CompanyInfo
-                details={details}
-                setCompanyId={setCompanyId}
-                meet={meet}
-                setMeet={setMeet}
-              />
-            }
-          />
-          <Route
-            path="article"
-            element={<Aritcle meet={meet} setMeet={setMeet} />}
-          />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/auth/confirm/*" element={<Temp />} />
-        <Route path="/auth/setjwt/*" element={<Blank />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <Helmet>
+        <link rel="icon" href="../asset/hammer.png" />
+        <meta name="robots" content="index" />
+        <meta
+          name="description"
+          content="公開面試經驗，分享公司薪水，可交流無障礙找工作建議的平台"
+        />
+        <meta
+          name="keywords"
+          content="面試,薪水,工作,經驗,交流,免費,最佳,推薦,一定大拇指"
+        />
+      </Helmet>
+      <BrowserRouter>
+        <Routes>
+          {/* 調整背景 */}
+          <Route path="/" element={<Layout meet={meet} />}>
+            <Route index element={<Home />} />
+            <Route path="search" element={<Search />} />
+            <Route
+              path="company"
+              element={
+                <CompanyInfo
+                  details={details}
+                  setCompanyId={setCompanyId}
+                  meet={meet}
+                  setMeet={setMeet}
+                />
+              }
+            />
+            <Route
+              path="article"
+              element={<Aritcle meet={meet} setMeet={setMeet} />}
+            />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/auth/confirm/*" element={<Temp />} />
+          <Route path="/auth/setjwt/*" element={<Blank />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 };
 

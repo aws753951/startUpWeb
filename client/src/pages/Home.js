@@ -69,27 +69,6 @@ const Home = () => {
           </a>
         </div>
       </div>
-      <div className="shadow-lg rounded-[10px] bg-white mt-2 mx-2 p-2 ">
-        <div className="text-center border-b-2 text-[36px] font-bold">
-          作者近期心情
-        </div>
-        <div className="text-center ">因為連夜趕工，想要趕快找到更好的工作</div>
-        <div className="text-center">疏忽對於毛小孩的照顧</div>
-        <div className="text-center">
-          導致我家的貓，皮卡丘，於7/29 FIP傳染性腹膜炎過世了
-        </div>
-        <div className="text-center">
-          想想自己花太多時間在前端這塊自己不熟的領域上
-        </div>
-
-        <div className="text-center">所以使用上可能有所不順，敬請見諒</div>
-        <div className="text-center">
-          短時間內應該也不會想維護並優化前端這塊
-        </div>
-        <div className="text-center">
-          因此若有相關建議，希望能以後端為主，謝謝
-        </div>
-      </div>
     </div>
   );
 };

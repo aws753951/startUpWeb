@@ -9,7 +9,7 @@ const Nav = ({
   setExpandRight,
 }) => {
   const navigate = useNavigate();
-  let [companyName, setCompanyName] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   const handleSearch = () => {
     if (companyName) {

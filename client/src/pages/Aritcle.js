@@ -11,8 +11,7 @@ const Aritcle = ({ meet, setMeet }) => {
   const queryParams = new URLSearchParams(location.search);
   const article_id = queryParams.get("article_id");
   const meetArticle_id = queryParams.get("meetArticle_id");
-
-  let [article, setArticle] = useState({});
+  const [article, setArticle] = useState({});
 
   useEffect(() => {
     const getArticle = async () => {

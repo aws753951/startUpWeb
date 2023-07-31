@@ -19,18 +19,14 @@ import {
 const Post = ({ data, meet }) => {
   const navigate = useNavigate();
   const user_id = JSON.parse(localStorage.getItem("session_user_id"));
-  let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
-
-  let [good, setGood] = useState(data.good.includes(user_id));
-  let [bad, setBad] = useState(data.bad.includes(user_id));
-
-  let [goodCount, setGoodCount] = useState(data.good.length);
-  let [badCount, setBadCount] = useState(data.bad.length);
-
-  let [openDetail, setOpenDetail] = useState(false);
-
-  let [commentOpen, setCommentOpen] = useState(false);
-  let [comments, setComments] = useState("");
+  const jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
+  const [good, setGood] = useState(data.good.includes(user_id));
+  const [bad, setBad] = useState(data.bad.includes(user_id));
+  const [goodCount, setGoodCount] = useState(data.good.length);
+  const [badCount, setBadCount] = useState(data.bad.length);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [comments, setComments] = useState("");
 
   // 避免別人使用Link時，狀態被transfer
   useEffect(() => {

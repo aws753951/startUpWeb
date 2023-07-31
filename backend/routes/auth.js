@@ -39,6 +39,7 @@ router.get(
   }
 );
 
+// 一般註冊
 router.post("/register", async (req, res) => {
   try {
     let { error } = authValidation(req.body);
@@ -87,6 +88,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// 別人從驗證網址(註冊後發送)導來
 router.get("/confirm/:token", async (req, res) => {
   const { token } = req.params;
 

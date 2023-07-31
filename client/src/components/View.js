@@ -15,7 +15,6 @@ import {
   ResponsiveContainer,
   Label,
 } from "recharts";
-
 import JobPost from "./JobPost";
 import MeetPost from "./MeetPost";
 
@@ -30,8 +29,8 @@ const View = ({
   setWrite,
 }) => {
   const navigate = useNavigate();
-  let [isOpen, setIsOpen] = useState(false);
-  let [shrink, setShrink] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [shrink, setShrink] = useState(true);
 
   // po文前先檢查，避免填完才發現不能po文
   const handlePost = async () => {
@@ -86,13 +85,27 @@ const View = ({
 
   // 計算平均年薪
   function getWage(data) {
-    let wage = 0;
-    data.forEach((e) => {
-      wage += e.yearwage / data.length;
-    });
-    return wage.toFixed(0);
+    console.log(data);
+    const yearwages_list = data.map((item) => item.yearwage);
+    const median = getMedian(yearwages_list);
+    return median.toFixed(0);
   }
+
+  function getMedian(arr) {
+    // 1. 將陣列進行排序
+    const sortedArr = arr.slice().sort((a, b) => a - b);
+    const mid = Math.floor(sortedArr.length / 2);
+    if (sortedArr.length % 2 === 0) {
+      // 2. 中位數為中間兩個數值的平均值
+      return (sortedArr[mid - 1] + sortedArr[mid]) / 2;
+    } else {
+      // 2. 中位數為單一值
+      return sortedArr[mid];
+    }
+  }
+
   let data3 = data ? getWage(data) : undefined;
+
   return (
     <div className="md:mx-[10px]  mt-2 ">
       {!write && (

@@ -7,8 +7,8 @@ const Temp = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
-  let [approve, setApprove] = useState(false);
-  let [res, setRes] = useState(false);
+  const [approve, setApprove] = useState(false);
+  const [res, setRes] = useState(false);
 
   useEffect(() => {
     const register = async () => {

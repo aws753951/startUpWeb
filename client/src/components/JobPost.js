@@ -6,22 +6,22 @@ import { useNavigate } from "react-router-dom";
 
 const JobPost = ({ companyId, isOpen, setIsOpen }) => {
   const navigate = useNavigate();
-  let [jobname, setJobname] = useState("");
-  let [level, setLevel] = useState("");
-  let [seniority, setSeniority] = useState("");
-  let [curseniority, setCurseniority] = useState("");
-  let [monthwage, setMonthwage] = useState("");
-  let [yearwage, setYearwage] = useState("");
-  let [workhour, setWorkhour] = useState("");
-  let [addworkhour, setAddworkhour] = useState("");
-  let [easy, setEasy] = useState("");
-  let [loading, setLoading] = useState("");
-  let [environ, setEnviron] = useState("");
-  let [satisfaction, setSatisfaction] = useState("");
-  let [experience, setExperience] = useState("");
-  let [oneword, setOneword] = useState("");
-
+  const [jobname, setJobname] = useState("");
+  const [level, setLevel] = useState("");
+  const [seniority, setSeniority] = useState("");
+  const [curseniority, setCurseniority] = useState("");
+  const [monthwage, setMonthwage] = useState("");
+  const [yearwage, setYearwage] = useState("");
+  const [workhour, setWorkhour] = useState("");
+  const [addworkhour, setAddworkhour] = useState("");
+  const [easy, setEasy] = useState("");
+  const [loading, setLoading] = useState("");
+  const [environ, setEnviron] = useState("");
+  const [satisfaction, setSatisfaction] = useState("");
+  const [experience, setExperience] = useState("");
+  const [oneword, setOneword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+
   const handleSubmit = async () => {
     let jwt_token = JSON.parse(localStorage.getItem("jwt_token"));
     if (!jwt_token) {
