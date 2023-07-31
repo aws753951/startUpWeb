@@ -7,6 +7,7 @@ require("./config/passport");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
 const searchRoute = require("./routes/search");
+const deleteRoute = require("./routes/delete");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
@@ -60,6 +61,12 @@ app.use(
 );
 
 app.use("/search", searchRoute);
+
+app.use(
+  "/delete",
+  passport.authenticate("jwt", { session: false }),
+  deleteRoute
+);
 
 const server = app.listen("8080", () => console.log(`8080 running`));
 
