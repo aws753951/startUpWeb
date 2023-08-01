@@ -4,6 +4,19 @@ const Home = () => {
   return (
     <div className="col-span-5 md:col-span-3 scrollset ">
       <div className="shadow-lg rounded-[10px] bg-white mt-2 mx-2 p-2 ">
+        <div className="text-center border-b-2 text-[36px] font-bold">
+          8/1 最新公告
+        </div>
+        <div className="text-center ">由於我把網站丟到PTT上討論</div>
+        <div className="text-center">得到一些啟發與方向</div>
+        <div className="text-center">因此，該網站短時間內不會做前端的更新</div>
+        <div className="text-center">會試著以chatgpt的角度取改造該網站</div>
+        <div className="text-center">也找到相關資源著手學習</div>
+        <div className="text-center">
+          謝謝各位，雖然目前好像沒什麼人使用 嗚嗚
+        </div>
+      </div>
+      <div className="shadow-lg rounded-[10px] bg-white mt-2 mx-2 p-2 ">
         <div className="text-center border-b-2 text-[36px] font-bold">公告</div>
         <div className="text-center ">
           大家好，該網站提供所有求職者在求職選找工作的時候能有個更加透明的管道
